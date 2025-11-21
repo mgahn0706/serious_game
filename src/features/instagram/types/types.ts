@@ -9,6 +9,13 @@ export interface Post {
   timestamp: string;
 }
 
+export interface Story {
+  id: string;
+  username: string;
+  image: string;
+  hasStory: boolean;
+}
+
 export interface Account {
   id: string;
   username: string;

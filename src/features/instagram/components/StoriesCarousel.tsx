@@ -1,53 +1,5 @@
-"use client";
-
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-interface Story {
-  id: string;
-  username: string;
-  image: string;
-  hasStory: boolean;
-}
-
-const stories: Story[] = [
-  {
-    id: "1",
-    username: "thdnwn0",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-  {
-    id: "2",
-    username: "mobeau_sh",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-  {
-    id: "3",
-    username: "01_doubl...",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-  {
-    id: "4",
-    username: "poikliothe...",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-  {
-    id: "5",
-    username: "youngjin_...",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-  {
-    id: "6",
-    username: "horangrin",
-    image: "/placeholder.jpg",
-    hasStory: true,
-  },
-];
 
 export default function StoriesCarousel() {
   const [scrollPos, setScrollPos] = useState(0);
@@ -114,3 +66,4 @@ export default function StoriesCarousel() {
 }
 
 import React from "react";
+import { stories } from "../fixtures/stories";
