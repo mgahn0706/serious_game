@@ -1,11 +1,10 @@
-"use client";
-
-import PostCard from "../features/instagram/components/PostCard";
 import Sidebar from "../features/instagram/components/Sidebar";
+import PostCard from "../features/instagram/components/PostCard";
 import SidebarSuggestions from "../features/instagram/components/SidebarSuggestions";
 import StoriesCarousel from "../features/instagram/components/StoriesCarousel";
+import { posts } from "@/features/instagram/fixtures/posts";
 
-export default function InstagramPage() {
+export default function Feed() {
   return (
     <div className="flex h-screen bg-background">
       {/* Left Sidebar */}
@@ -19,24 +18,9 @@ export default function InstagramPage() {
 
           {/* Posts */}
           <div className="divide-y divide-border">
-            <PostCard
-              author="ysang_1120"
-              authorImage="placeholder.jpg"
-              postImages={["placeholder.jpg"]}
-              likes={14}
-              caption="... 더 보기"
-              comments={[{ author: "dawnn_tarot", text: "응고" }]}
-              timestamp="2025.09-11"
-            />
-            <PostCard
-              author="dawnn_tarot"
-              authorImage="/placeholder.jpg"
-              postImages={["/placeholder.jpg"]}
-              likes={23}
-              caption="좋은 글귀..."
-              comments={[]}
-              timestamp="2 hours ago"
-            />
+            {posts.map((post) => (
+              <PostCard key={post.id} {...post} />
+            ))}
           </div>
         </div>
 

@@ -1,58 +1,8 @@
-"use client";
-
 import { useState } from "react";
+import { Button } from "../../../components/ui/button";
+import { myAccount, suggestedAccounts } from "../fixtures/account";
 
-interface SuggestedUser {
-  id: string;
-  username: string;
-  handle: string;
-  image: string;
-  description: string;
-}
-
-const currentUser = {
-  username: "4n_gyu",
-  handle: "이민규",
-  image: "/placeholder.jpg?key=gchm6",
-};
-
-const suggestedUsers: SuggestedUser[] = [
-  {
-    id: "1",
-    username: "sh_ad_astra",
-    handle: "temp_humb의 게팔 팔로우중입니다",
-    image: "/placeholder.jpg?key=x8qoa",
-    description: "",
-  },
-  {
-    id: "2",
-    username: "wonjunc01",
-    handle: "myallstrssg의 게팔 팔로우중입니다",
-    image: "/placeholder.jpg?key=cpoqe",
-    description: "",
-  },
-  {
-    id: "3",
-    username: "snuclsalum",
-    handle: "zzong_bbee의 게팔 팔로우중입니다",
-    image: "/placeholder.jpg?key=t2blx",
-    description: "",
-  },
-  {
-    id: "4",
-    username: "hoxjeong",
-    handle: "wbadddy의 게팔 팔로우중입니다",
-    image: "/placeholder.jpg?key=d5ra4",
-    description: "",
-  },
-  {
-    id: "5",
-    username: "b.incan",
-    handle: "qiwasd_01의 게팔 팔로우중입니다",
-    image: "/placeholder.jpg?key=yg4w3",
-    description: "",
-  },
-];
+const currentUser = myAccount;
 
 export default function SidebarSuggestions() {
   const [following, setFollowing] = useState<Record<string, boolean>>({});
@@ -100,7 +50,7 @@ export default function SidebarSuggestions() {
 
       {/* Suggested users */}
       <div className="space-y-3">
-        {suggestedUsers.map((user) => (
+        {suggestedAccounts.map((user) => (
           <div key={user.id} className="flex items-center justify-between">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <img
@@ -117,14 +67,14 @@ export default function SidebarSuggestions() {
                 </p>
               </div>
             </div>
-            {/* <Button
+            <Button
               size="sm"
               variant="ghost"
               className="text-xs font-semibold whitespace-nowrap text-primary hover:bg-transparent hover:text-primary/80"
               onClick={() => toggleFollow(user.id)}
             >
               {following[user.id] ? "팔로우 중" : "팔로우"}
-            </Button> */}
+            </Button>
           </div>
         ))}
       </div>

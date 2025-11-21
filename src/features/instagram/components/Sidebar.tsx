@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import {
   Home,
   Search,
@@ -32,7 +34,7 @@ export default function Sidebar() {
             className="text-2xl font-light italic tracking-tight"
             style={{ fontFamily: "'Brush Script MT', cursive" }}
           >
-            Instagram
+            Instakilogram
           </h1>
         )}
       </div>
@@ -54,12 +56,6 @@ export default function Sidebar() {
 
       {/* Bottom Section */}
       <div className="p-4 border-t border-border space-y-2">
-        <NavItem
-          icon={MoreHorizontal}
-          label="더 보기"
-          isCollapsed={isCollapsed}
-        />
-
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-secondary text-foreground transition-colors"
