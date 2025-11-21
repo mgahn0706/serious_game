@@ -137,10 +137,6 @@ body,
   height: 100%;
 }
 
-body {
-  @apply bg-carrotGrayBg text-[13px] text-carrotText font-sans;
-}
-
 /* 스크롤바 얇게 */
 * {
   scrollbar-width: thin;
