@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { DanggeunPage } from "./pages/DanggeunPage";
+import DanggeunPage from "./pages/DanggeunPage";
 import EverytimePage from "./pages/EverytimePage";
 import InstagramPage from "./pages/InstagramPage";
 
