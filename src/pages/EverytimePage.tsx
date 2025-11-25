@@ -106,7 +106,7 @@ const centerBoards: BoardColumn[] = [
 const hotPosts: Post[] = [
   {
     id: 1,
-    title: "MBc도 대학원생인가 이태도 되는건가?",
+    title: "학원생인가 이래도 되는건가?",
     meta: "자유게시판 · 댓글 50 · 07:27",
   },
   {
