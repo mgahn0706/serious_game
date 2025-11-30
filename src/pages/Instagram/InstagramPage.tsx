@@ -1,7 +1,7 @@
-import Sidebar from "../features/instagram/components/Sidebar";
-import PostCard from "../features/instagram/components/PostCard";
-import SidebarSuggestions from "../features/instagram/components/SidebarSuggestions";
-import StoriesCarousel from "../features/instagram/components/StoriesCarousel";
+import Sidebar from "../../features/instagram/components/Sidebar";
+import PostCard from "../../features/instagram/components/PostCard";
+import SidebarSuggestions from "../../features/instagram/components/SidebarSuggestions";
+import StoriesCarousel from "../../features/instagram/components/StoriesCarousel";
 import { posts } from "@/features/instagram/fixtures/posts";
 
 export default function Feed() {

@@ -12,6 +12,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -40,17 +41,48 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        <NavItem icon={Home} label="홈" isCollapsed={isCollapsed} isActive />
-        <NavItem icon={Search} label="검색" isCollapsed={isCollapsed} />
-        <NavItem icon={Compass} label="탐색 탭" isCollapsed={isCollapsed} />
-        <NavItem icon={Heart} label="릴스" isCollapsed={isCollapsed} />
+        <NavItem
+          icon={Home}
+          label="홈"
+          isCollapsed={isCollapsed}
+          to="/instagram"
+        />
+        <NavItem
+          icon={Search}
+          label="검색"
+          isCollapsed={isCollapsed}
+          to="/instagram/search"
+        />
+        <NavItem
+          icon={Compass}
+          label="탐색 탭"
+          isCollapsed={isCollapsed}
+          to="/instagram/explore"
+        />
+        <NavItem
+          icon={Heart}
+          label="릴스"
+          isCollapsed={isCollapsed}
+          to="/instagram/reels"
+        />
         <NavItem
           icon={MessageCircle}
           label="메시지"
           isCollapsed={isCollapsed}
+          to="/instagram/messages"
         />
-        <NavItem icon={Plus} label="만들기" isCollapsed={isCollapsed} />
-        <NavItem icon={User} label="프로필" isCollapsed={isCollapsed} />
+        <NavItem
+          icon={Plus}
+          label="만들기"
+          isCollapsed={isCollapsed}
+          to="/instagram/create"
+        />
+        <NavItem
+          icon={User}
+          label="프로필"
+          isCollapsed={isCollapsed}
+          to="/instagram/profile"
+        />
       </nav>
 
       {/* Bottom Section */}
@@ -71,25 +103,23 @@ interface NavItemProps {
   icon: React.ElementType;
   label: string;
   isCollapsed: boolean;
-  isActive?: boolean;
+  to: string;
 }
 
-function NavItem({
-  icon: Icon,
-  label,
-  isCollapsed,
-  isActive = false,
-}: NavItemProps) {
+function NavItem({ icon: Icon, label, isCollapsed, to }: NavItemProps) {
   return (
-    <button
-      className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all w-full text-sm ${
-        isActive
-          ? "bg-transparent text-foreground font-semibold"
-          : "hover:bg-secondary/50 text-foreground"
-      }`}
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center gap-4 px-4 py-3 rounded-lg transition-all w-full text-sm ${
+          isActive
+            ? "bg-secondary/30 text-foreground font-semibold"
+            : "hover:bg-secondary/50 text-foreground"
+        }`
+      }
     >
       <Icon className="w-6 h-6 flex-shrink-0" />
       {!isCollapsed && <span>{label}</span>}
-    </button>
+    </NavLink>
   );
 }
