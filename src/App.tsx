@@ -5,6 +5,7 @@ import EverytimePostDetailPage from "./pages/Everytime/EverytimePostDetailPage";
 import InstagramPage from "./pages/Instagram/InstagramPage";
 import ExplorePage from "./pages/Instagram/ExplorePage";
 import DefaultPage from "./pages/DefaultPage";
+import ProfilePage from "./pages/Instagram/ProfilePage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       {/* Instagram */}
       <Route path="/instagram" element={<InstagramPage />} />
       <Route path="/instagram/explore" element={<ExplorePage />} />
+      <Route path="/instagram/profile/:id" element={<ProfilePage />} />{" "}
       {/* Everytime */}
       <Route path="/everytime" element={<EverytimePage />} />
       <Route path="/everytime/:id" element={<EverytimePostDetailPage />} />{" "}
