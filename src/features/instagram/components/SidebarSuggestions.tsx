@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 import { myAccount, suggestedAccounts } from "../fixtures/account";
+import { NavLink } from "react-router-dom";
 
 const currentUser = myAccount;
 
@@ -17,25 +18,26 @@ export default function SidebarSuggestions() {
   return (
     <div className="p-4">
       {/* Current user */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3 flex-1">
-          <img
-            src={currentUser.image || "/placeholder.jpg"}
-            alt="user"
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm truncate">
-              {currentUser.username}
-            </p>
-            <p className="text-xs text-muted-foreground truncate">
-              {currentUser.handle}
-            </p>
+
+      <div className="flex items-center justify-between mb-6 hover:bg-secondary/50 p-2 rounded-lg cursor-pointer">
+        <NavLink
+          to={`/instagram/profile/${currentUser.id}`}
+          className="flex items-center gap-3 flex-1"
+        >
+          <div className="flex items-center gap-3 flex-1">
+            <img
+              src={currentUser.image || "/placeholder.jpg"}
+              alt="user"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-sm truncate">{currentUser.id}</p>
+              <p className="text-xs text-muted-foreground truncate">
+                {currentUser.username}
+              </p>
+            </div>
           </div>
-        </div>
-        <button className="text-primary font-semibold text-sm hover:text-primary/80 whitespace-nowrap">
-          전환
-        </button>
+        </NavLink>
       </div>
 
       {/* Suggestions header */}
@@ -43,9 +45,6 @@ export default function SidebarSuggestions() {
         <h3 className="font-semibold text-sm text-muted-foreground">
           회원님을 위한 추천
         </h3>
-        <button className="text-sm font-semibold text-foreground hover:text-muted-foreground">
-          모두 보기
-        </button>
       </div>
 
       {/* Suggested users */}
@@ -59,11 +58,9 @@ export default function SidebarSuggestions() {
                 className="w-8 h-8 rounded-full object-cover flex-shrink-0"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold truncate">
-                  {user.username}
-                </p>
+                <p className="text-sm font-semibold truncate">{user.id}</p>
                 <p className="text-xs text-muted-foreground truncate">
-                  {user.handle}
+                  {user.username}
                 </p>
               </div>
             </div>

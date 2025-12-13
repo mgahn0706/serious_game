@@ -10,5 +10,6 @@ export const posts: Post[] = [
     caption: "좋은 사람들과,,, 좋은 시간 ^^",
     comments: [],
     timestamp: "2 hours ago",
+    algorithmOrder: null,
   },
 ];

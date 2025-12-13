@@ -7,19 +7,19 @@ export interface Post {
   caption: string;
   comments: { author: string; text: string }[];
   timestamp: string;
+  algorithmOrder: number | null;
+  taggedUserIds?: string[];
 }
 
 export interface Story {
   id: string;
   username: string;
-  image: string;
-  hasStory: boolean;
+  storyImage: string;
 }
 
 export interface Account {
   id: string;
   username: string;
-  handle: string;
   image: string;
   bio: string;
   followers: number;
