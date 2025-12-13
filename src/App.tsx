@@ -6,6 +6,7 @@ import InstagramPage from "./pages/Instagram/InstagramPage";
 import ExplorePage from "./pages/Instagram/ExplorePage";
 import DefaultPage from "./pages/DefaultPage";
 import ProfilePage from "./pages/Instagram/ProfilePage";
+import CalendarPage from "./pages/CalendarPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       {/* ← 동적 라우트 */}
       {/* Others */}
       <Route path="/danggeun" element={<DanggeunPage />} />
+      <Route path="/calendar" element={<CalendarPage />} />
       <Route path="*" element={<DefaultPage />} />
     </Routes>
   );

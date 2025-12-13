@@ -36,6 +36,14 @@ const DefaultPage: React.FC = () => {
       color: "from-orange-500 to-lime-400",
       path: "/danggeun",
     },
+    {
+      id: "calendar",
+      label: "캘린더 앱",
+      desc: "일정 관리를 통한 단서 추적",
+      icon: MessageCircle,
+      color: "from-blue-500 to-indigo-400",
+      path: "/calendar",
+    },
   ];
 
   return (
