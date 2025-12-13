@@ -1,5 +1,5 @@
 // src/features/calendar/components/WeekView.tsx
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import type { CalendarEvent } from "@/features/calendar/types/types";
 import {
   DOW_KR,
