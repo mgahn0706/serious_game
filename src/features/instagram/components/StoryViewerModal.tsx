@@ -1,7 +1,7 @@
 // src/features/instagram/components/StoryViewerModal.tsx
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,

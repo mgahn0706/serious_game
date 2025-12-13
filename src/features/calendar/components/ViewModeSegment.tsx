@@ -1,5 +1,4 @@
 // src/features/calendar/components/ViewModeSegment.tsx
-import React from "react";
 
 export type ViewMode = "Day" | "Week" | "Month";
 

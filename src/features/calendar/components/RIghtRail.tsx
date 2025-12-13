@@ -1,5 +1,4 @@
 // src/features/calendar/components/RightRail.tsx
-import React from "react";
 
 export function RightRail() {
   return (

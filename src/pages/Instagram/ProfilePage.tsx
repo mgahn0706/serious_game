@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  MoreHorizontal,
   UserPlus,
   Grid3X3,
   UserRound,

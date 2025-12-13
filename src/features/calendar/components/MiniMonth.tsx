@@ -1,5 +1,5 @@
 // src/features/calendar/components/MiniMonth.tsx
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Svg } from "./Svg";
 import {
   DOW_KR,

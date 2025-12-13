@@ -1,5 +1,5 @@
 // src/features/calendar/components/TopBar.tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "./Icon";
 import { Svg } from "./Svg";
 import { formatKoreanFullDate } from "../utils/date";
