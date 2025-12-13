@@ -15,4 +15,15 @@ export const scheduleFixture: CalendarEvent[] = [
     end: "2025-12-13T18:00:00+09:00",
     variant: "filled",
   },
+
+  // 🎄 Christmas (all-day, yearly)
+  {
+    id: "e_christmas_2025",
+    title: "Christmas 🎄",
+    start: "2025-12-25T00:00:00+09:00",
+    end: "2025-12-26T00:00:00+09:00",
+    variant: "outlined",
+    allDay: true,
+    recurrence: "yearly",
+  },
 ];

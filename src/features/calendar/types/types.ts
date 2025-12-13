@@ -1,8 +1,10 @@
 export type CalendarEvent = {
   id: string;
   title: string;
-  location?: string;
   start: string;
   end: string;
-  variant?: "filled" | "outlined";
+  location?: string;
+  variant: "filled" | "outlined";
+  allDay?: boolean;
+  recurrence?: "yearly" | "monthly" | "weekly";
 };
