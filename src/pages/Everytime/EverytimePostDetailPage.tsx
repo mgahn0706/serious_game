@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  Flag,
   ThumbsUp,
   ThumbsDown,
   Bookmark,
@@ -44,10 +43,10 @@ export default function EverytimePostDetailPage() {
           해당 게시글을 찾을 수 없습니다.
           <div className="mt-4">
             <button
-              onClick={() => navigate("/everytime")}
+              onClick={() => navigate(`/everytime/board/${board.id}`)}
               className="px-4 py-2 border border-red-500 text-red-500 text-sm font-semibold rounded bg-white hover:bg-red-50"
             >
-              글 목록으로
+              글 목록
             </button>
           </div>
         </div>
@@ -102,16 +101,12 @@ export default function EverytimePostDetailPage() {
                   <span className="text-base font-semibold text-gray-900">
                     {board.title}
                   </span>
-                  <Flag className="w-4 h-4 text-black" />
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
                   {board.description ?? "게시판 설명이 없습니다."}
                 </div>
               </div>
-              <div className="text-xs text-gray-400 space-x-3">
-                <button className="hover:underline">쪽지</button>
-                <button className="hover:underline">신고</button>
-              </div>
+              <div className="text-xs text-gray-400 space-x-3"></div>
             </div>
 
             {/* Post */}
@@ -123,14 +118,9 @@ export default function EverytimePostDetailPage() {
                   <div className="text-xs font-semibold text-gray-700">
                     익명
                   </div>
-                  <div className="text-xs text-gray-400">
-                    {post.createdAt} 01:25
-                  </div>
+                  <div className="text-xs text-gray-400">{post.createdAt}</div>
                 </div>
-                <div className="text-xs text-gray-400 space-x-3">
-                  <button className="hover:underline">쪽지</button>
-                  <button className="hover:underline">신고</button>
-                </div>
+                <div className="text-xs text-gray-400 space-x-3"></div>
               </div>
 
               {/* Title & body */}
@@ -197,7 +187,7 @@ export default function EverytimePostDetailPage() {
             <div className="px-6 py-4 flex items-center justify-between">
               <button
                 className="px-4 py-2 border border-red-500 text-red-500 text-sm font-semibold rounded bg-white hover:bg-red-50"
-                onClick={() => navigate("/everytime")}
+                onClick={() => navigate(`/everytime/board/${board.id}`)}
               >
                 글 목록
               </button>
@@ -292,12 +282,9 @@ function CommentActions({
   const base = small ? "text-xs" : "text-xs";
   return (
     <div className={`${base} text-gray-400 space-x-4`}>
-      {!small && <button className="hover:underline">대댓글</button>}
       <button className="hover:underline">
         공감{likeCount > 0 ? `(${likeCount})` : ""}
       </button>
-      <button className="hover:underline">쪽지</button>
-      <button className="hover:underline">신고</button>
     </div>
   );
 }

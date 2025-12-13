@@ -11,7 +11,7 @@ export const everytimeData: EverytimeData = {
     {
       id: asBoardId("board-abroad"),
       categoryTitle: "홍보게시판",
-      title: "유학 + 해외체류 게시판",
+      title: "유학 + 해외체류 게시판 ✈️",
       posts: [
         {
           id: asPostId("post-1"),
