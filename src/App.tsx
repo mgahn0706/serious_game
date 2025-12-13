@@ -16,8 +16,8 @@ function App() {
       <Route path="/instagram/explore" element={<ExplorePage />} />
       <Route path="/instagram/profile/:id" element={<ProfilePage />} />{" "}
       {/* Everytime */}
-      <Route path="/everytime" element={<EverytimePage />} />
-      <Route path="/everytime/:id" element={<EverytimePostDetailPage />} />{" "}
+      <Route path="/everytime/board/:boardId" element={<EverytimePage />} />
+      <Route path="/everytime/:id" element={<EverytimePostDetailPage />} />
       {/* ← 동적 라우트 */}
       {/* Others */}
       <Route path="/danggeun" element={<DanggeunPage />} />
