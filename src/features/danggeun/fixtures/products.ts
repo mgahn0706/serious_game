@@ -50,7 +50,7 @@ export const products: Product[] = [
     location: "압구정동",
     time: "5시간 전",
     imageUrl:
-      "https://images.unsplash.com/photo-1581091012184-5c8c8c5c1d6d?auto=format&fit=crop&w=600&q=80",
+      "https://i.namu.wiki/i/v7sM90pQKRCVT3PwDqDY0QdYM3RoxnjHPWEDstxAuP2iCkev3xOojgW20NK0w4gVJJo4guvOD7_-mLyLsz3CLg.webp",
     sellerId: 1,
     category: "기타 중고물품",
     description: `사용하지 않은 유심입니다.
@@ -92,9 +92,9 @@ export const products: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1518655048521-f130df041f66?auto=format&fit=crop&w=600&q=80",
     sellerId: 2,
-    category: "스포츠/레저",
+    category: "자전거",
     description: `출퇴근용으로 사용했습니다.
-브레이크, 기어 정상 작동.`,
+브레이크, 기어 정상 작동. 근데 앞바퀴가 없어요`,
     stats: {
       chat: 2,
       interest: 6,
@@ -144,7 +144,7 @@ export const products: Product[] = [
     title: "Komplete Kontrol S88 마스터키보드",
     price: 900000,
     location: "삼성동",
-    time: "3일 전",
+    time: "12일 전",
     imageUrl:
       "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=80",
     sellerId: 3,
@@ -163,7 +163,7 @@ export const products: Product[] = [
     title: "Adam Audio A7V 스튜디오 모니터 스피커 (1조)",
     price: 1600000,
     location: "삼성동",
-    time: "4일 전",
+    time: "14일 전",
     imageUrl:
       "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?auto=format&fit=crop&w=600&q=80",
     sellerId: 3,
@@ -248,7 +248,7 @@ export const products: Product[] = [
     location: "도곡1동",
     time: "5시간 전",
     imageUrl:
-      "https://images.unsplash.com/photo-1526481280695-3c687fd5432c?auto=format&fit=crop&w=600&q=80",
+      "https://contents.kyobobook.co.kr/sih/fit-in/375x0/gift/pdt/1757/S1666603323322.jpg",
     sellerId: 6,
     category: "포토카드",
     description: `중복 정리합니다.
@@ -308,7 +308,7 @@ export const products: Product[] = [
     location: "압구정동",
     time: "4시간 전",
     imageUrl:
-      "https://images.unsplash.com/photo-1581579185169-1c4c62bda0d4?auto=format&fit=crop&w=600&q=80",
+      "https://dyson-h.assetsadobe2.com/is/image/content/dam/dyson/leap-petite-global/markets/korea/products/floorcare/v8-origin/V8OriginKR_PDP.png?fmt=png-alpha&scl=1&fmt=png-alpha",
     sellerId: 8,
     category: "다이슨",
     description: `흡입력 문제 없습니다.
@@ -355,7 +355,7 @@ export const products: Product[] = [
     location: "역삼1동",
     time: "2시간 전",
     imageUrl:
-      "https://images.unsplash.com/photo-1585386959984-a4155222c5d3?auto=format&fit=crop&w=600&q=80",
+      "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111861_airpods_pro_case__eqmrrx2cfpkm_large.png",
     sellerId: 10,
     category: "에어팟",
     description: `정품이고 정상 작동합니다.
