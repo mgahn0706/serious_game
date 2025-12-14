@@ -71,13 +71,24 @@ export function TimeGridDay({
   }, [events, date, startHour, endHour, minutesPerPx]);
 
   const nowPos = useMemo(() => {
-    if (!isSameDateAsNow) return null;
-    const minutesFromStart =
-      (now.getHours() - startHour) * 60 + now.getMinutes();
+    // ✅ 12/18은 데모용으로 빨간선 9PM(21:00)에 고정
+    const isDec18 =
+      date.getMonth() === 11 && // December (0-indexed)
+      date.getDate() === 18;
+
+    // 원래: 오늘(date==now)일 때만 표시
+    // 데모: 12/18은 "오늘이 아니어도" 표시하고 21:00에 고정
+    if (!isSameDateAsNow && !isDec18) return null;
+
+    const h = isDec18 ? 21 : now.getHours();
+    const m = isDec18 ? 0 : now.getMinutes();
+
+    const minutesFromStart = (h - startHour) * 60 + m;
     const maxMinutes = (endHour - startHour + 1) * 60;
     const clamped = Math.max(0, Math.min(maxMinutes, minutesFromStart));
+
     return (clamped / 60) * rowH;
-  }, [isSameDateAsNow, now, startHour, endHour, rowH]);
+  }, [isSameDateAsNow, date, now, startHour, endHour, rowH]);
 
   return (
     <div className="relative flex-1 overflow-auto bg-white">
