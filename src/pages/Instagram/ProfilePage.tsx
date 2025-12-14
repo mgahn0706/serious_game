@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   UserPlus,
   Grid3X3,
@@ -13,7 +13,7 @@ import {
 import Sidebar from "../../features/instagram/components/Sidebar";
 import { posts } from "@/features/instagram/fixtures/posts";
 import { allAccounts } from "@/features/instagram/fixtures/account";
-import PostModal from "@/features/instagram/components/PostModal"; // ✅ add (path 맞게 조정)
+import PostModal from "@/features/instagram/components/PostModal";
 
 export default function ProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +27,6 @@ export default function ProfilePage() {
 
   const allPosts = posts;
 
-  // ✅ filter posts
   const userPosts = useMemo(
     () => allPosts.filter((post) => post.author === id),
     [allPosts, id]
@@ -38,7 +37,6 @@ export default function ProfilePage() {
     [allPosts, id]
   );
 
-  // ✅ modal states
   const [openPost, setOpenPost] = useState<any | null>(null);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
 
@@ -86,9 +84,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-3 md:gap-4">
                 <h2 className="text-2xl font-light">{id}</h2>
 
-                {isMyProfile ? (
-                  <></>
-                ) : (
+                {!isMyProfile && (
                   <>
                     <button className="hidden sm:inline-flex px-4 py-1.5 rounded-md bg-secondary text-sm font-semibold">
                       팔로잉
@@ -134,7 +130,7 @@ export default function ProfilePage() {
               {/* Bio */}
               {account.bio && (
                 <div className="text-sm leading-5 whitespace-pre-line">
-                  {account.bio}
+                  {renderBioWithMentions(account.bio)}
                 </div>
               )}
             </div>
@@ -210,7 +206,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* ✅ Post Modal */}
       {openPost && (
         <PostModal
           post={openPost}
@@ -225,6 +220,39 @@ export default function ProfilePage() {
 
 /* ----------------- helpers ----------------- */
 
+function renderBioWithMentions(bio: string) {
+  const re = /@([A-Za-z0-9._]+)(\s*)/g;
+
+  const nodes: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let m: RegExpExecArray | null;
+
+  while ((m = re.exec(bio)) !== null) {
+    const [full, username, spaces] = m;
+    const start = m.index;
+
+    if (start > lastIdx) nodes.push(bio.slice(lastIdx, start));
+
+    const mentionText = `@${username}${spaces}`;
+
+    nodes.push(
+      <Link
+        key={`${start}-${username}`}
+        to={`/instagram/profile/${username}`}
+        className="text-sky-500 hover:underline"
+      >
+        {mentionText}
+      </Link>
+    );
+
+    lastIdx = start + full.length;
+  }
+
+  if (lastIdx < bio.length) nodes.push(bio.slice(lastIdx));
+
+  return nodes;
+}
+
 function formatCount(v: unknown) {
   const n =
     typeof v === "number"
@@ -237,10 +265,8 @@ function formatCount(v: unknown) {
 
   const abs = Math.abs(n);
 
-  // < 1,000
   if (abs < 1000) return String(Math.trunc(n));
 
-  // 1,000 ~ 999,999 => K (one decimal when < 10K like 1.2K)
   if (abs < 1_000_000) {
     const value = n / 1000;
     const rounded =
@@ -248,7 +274,6 @@ function formatCount(v: unknown) {
     return `${trimTrailingZero(rounded)}K`;
   }
 
-  // 1,000,000 ~ 999,999,999 => M (one decimal when < 10M like 1.2M)
   if (abs < 1_000_000_000) {
     const value = n / 1_000_000;
     const rounded =
@@ -256,7 +281,6 @@ function formatCount(v: unknown) {
     return `${trimTrailingZero(rounded)}M`;
   }
 
-  // >= 1B
   const value = n / 1_000_000_000;
   const rounded =
     Math.abs(value) < 10 ? Math.round(value * 10) / 10 : Math.round(value);
@@ -264,7 +288,6 @@ function formatCount(v: unknown) {
 }
 
 function trimTrailingZero(v: number) {
-  // 1.0 -> "1", 1.2 -> "1.2"
   const s = String(v);
   return s.endsWith(".0") ? s.slice(0, -2) : s;
 }

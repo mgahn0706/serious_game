@@ -21,12 +21,6 @@ function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
 }
 
-/**
- * StoryItem list normalization:
- * - items 있으면 items 사용
- * - storyImages/storyImage 있으면 그걸로 image item 생성
- * - 마지막 fallback은 avatar(계정 이미지)로 처리하도록, 외부에서 avatarFallback을 주입
- */
 function normalizeStoryItems(
   story: Story,
   avatarFallback: string
@@ -53,7 +47,6 @@ function normalizeStoryItems(
     ];
   }
 
-  // ✅ never break: show avatar as story content
   return [
     {
       id: `${story.id}-fallback`,
@@ -73,7 +66,6 @@ export default function StoryViewerModal({
   initialStoryId: string;
   onClose: () => void;
 }) {
-  // ✅ userId -> account lookup map (Story.userId === account.id 기준)
   const accountById = useMemo(() => {
     const m = new Map<string, (typeof allAccounts)[number]>();
     for (const acc of allAccounts) {
@@ -93,7 +85,6 @@ export default function StoryViewerModal({
 
   const getDisplayNameByUserId = (userId?: string) => {
     const acc = getAccountByUserId(userId);
-    // 인스타처럼 위에는 보통 id(핸들)가 뜸. 없으면 username 등 fallback
     return acc?.id || acc?.username || String(userId ?? "");
   };
 
@@ -107,8 +98,6 @@ export default function StoryViewerModal({
   const [storyIdx, setStoryIdx] = useState(storyIndex0);
   const [itemIdx, setItemIdx] = useState(0);
   const [paused, setPaused] = useState(false);
-
-  // 0..1 progress for current item
   const [progress, setProgress] = useState(0);
 
   const rafRef = useRef<number | null>(null);
@@ -131,7 +120,6 @@ export default function StoryViewerModal({
   const currentItem = currentItems[safeItemIdx];
   const durationMs = currentItem?.durationMs ?? 5000;
 
-  // side previews
   const prevStory = safeStoryIdx > 0 ? stories[safeStoryIdx - 1] : null;
   const nextStory =
     safeStoryIdx < stories.length - 1 ? stories[safeStoryIdx + 1] : null;
@@ -169,7 +157,6 @@ export default function StoryViewerModal({
     onClose();
   };
 
-  // ESC + arrow key nav
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -182,13 +169,11 @@ export default function StoryViewerModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [safeStoryIdx, itemIdx, currentItems.length, onClose]);
 
-  // reset when story changes
   useEffect(() => {
     setItemIdx(0);
     setProgress(0);
   }, [safeStoryIdx]);
 
-  // progress player
   useEffect(() => {
     if (paused) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -214,7 +199,6 @@ export default function StoryViewerModal({
     };
   }, [paused, durationMs]);
 
-  // auto-advance
   useEffect(() => {
     if (progress >= 1) {
       setProgress(0);
@@ -226,7 +210,6 @@ export default function StoryViewerModal({
   const timeAgo = currentStory?.timeAgo ?? "6시간";
   const currentDisplayName = getDisplayNameByUserId(currentStory?.userId);
 
-  // ✅ preview helper: story의 첫 item 또는 avatar 보여주기
   const previewSrc = (s: Story) => {
     const avatar = getAvatarByUserId(s.userId);
     const items = normalizeStoryItems(s, avatar);
@@ -236,16 +219,17 @@ export default function StoryViewerModal({
   const previewName = (s: Story) => getDisplayNameByUserId(s.userId);
 
   return (
-    <div className="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center">
-      {/* close on background click */}
-      <button
-        type="button"
-        aria-label="Close story viewer background"
-        className="absolute inset-0 cursor-default"
-        onClick={onClose}
-      />
-
-      <div className="relative z-[1000] w-full max-w-[1200px] px-6 flex items-center justify-center gap-8">
+    // ✅ 배경 클릭 시 닫기 (모달 내부는 stopPropagation)
+    <div
+      className="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center"
+      onMouseDown={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="relative z-[1000] w-full max-w-[1200px] px-6 flex items-center justify-center gap-8"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         {/* LEFT preview */}
         <div className="hidden md:flex items-center justify-center w-[220px]">
           {prevStory ? (

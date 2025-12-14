@@ -37,7 +37,6 @@ export default function StoriesCarousel() {
     setScrollPos(newPos);
   };
 
-  // Keep only stories that actually have story content (optional)
   const storyList = useMemo(() => stories, []);
 
   return (
@@ -53,13 +52,12 @@ export default function StoriesCarousel() {
                 onClick={() => openViewer(String(story.id))}
                 className="flex flex-col items-center gap-2 flex-shrink-0 group"
               >
-                {/* Story ring */}
+                {/* ✅ ALWAYS "unread" ring */}
                 <div
-                  className={`w-16 h-16 rounded-full p-[2px] flex-shrink-0 flex items-center justify-center transition-transform group-hover:scale-110 ${
-                    story.hasStory
-                      ? "bg-gradient-to-br from-yellow-400 via-red-500 to-pink-600"
-                      : "bg-gray-300"
-                  }`}
+                  className={
+                    "w-16 h-16 rounded-full p-[2px] flex-shrink-0 flex items-center justify-center transition-transform group-hover:scale-110 " +
+                    "bg-gradient-to-br from-yellow-400 via-red-500 to-pink-600"
+                  }
                 >
                   <div className="w-full h-full rounded-full bg-white p-[3px] overflow-hidden">
                     <img

@@ -302,7 +302,7 @@ export default function Sidebar() {
           ) : isSearching ? (
             <SearchSkeleton />
           ) : searchResults.length > 0 ? (
-            searchResults.map((account) => (
+            searchResults.slice(0, 5).map((account) => (
               <button
                 key={account.id}
                 onClick={() => go(`/instagram/profile/${account.id}`)}

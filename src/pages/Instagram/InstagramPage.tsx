@@ -2,8 +2,7 @@ import Sidebar from "../../features/instagram/components/Sidebar";
 import PostCard from "../../features/instagram/components/PostCard";
 import SidebarSuggestions from "../../features/instagram/components/SidebarSuggestions";
 import StoriesCarousel from "../../features/instagram/components/StoriesCarousel";
-import { posts } from "@/features/instagram/fixtures/posts";
-import { myAccount } from "@/features/instagram/fixtures/account";
+import { mainPagePostIds, posts } from "@/features/instagram/fixtures/posts";
 
 export default function Feed() {
   return (
@@ -19,17 +18,14 @@ export default function Feed() {
 
           {/* Posts */}
           <div className="divide-y divide-border">
-            {posts
-              .sort((a, b) => {
+            {mainPagePostIds
+              .sort(() => {
                 //random
                 return 0.5 - Math.random();
               })
-              .filter(
-                (post) =>
-                  post.algorithmOrder === null && post.author !== myAccount.id
-              )
-              .map((post) => (
-                <PostCard key={post.id} post={post} />
+
+              .map((id) => (
+                <PostCard key={id} post={posts.find((p) => p.id === id)!} />
               ))}
           </div>
         </div>

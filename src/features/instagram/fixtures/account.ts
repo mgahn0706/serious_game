@@ -64,9 +64,9 @@ const mainAccounts: Account[] = [
 const additionalAccounts: Account[] = [
   {
     id: "gusty_park",
-    username: "박강산",
+    username: "현정",
     image: "/instagram/profile/placeholder.png",
-    bio: "Nature lover and adventure seeker.",
+    bio: "EWHA MUSIC 25",
     followers: 350,
     following: 400,
     postCount: 8,
@@ -106,6 +106,25 @@ const additionalAccounts: Account[] = [
     followers: 12000,
     following: 300,
     postCount: 180,
+  },
+  {
+    id: "agro_ggun",
+    username: "어그로꾼",
+    image:
+      "https://i.pinimg.com/736x/88/b6/b2/88b6b2e6eb7ef5c2df5d5f288edfa118.jpg",
+    bio: "광고 문의는 DM으로",
+    followers: 9500,
+    following: 400,
+    postCount: 220,
+  },
+  {
+    id: "sim_hyejin",
+    username: "심현진",
+    image: "/instagram/profile/placeholder.png",
+    bio: "피아노로 유학 가는게 꿈입니다. @yoon_music_s2",
+    followers: 300,
+    following: 180,
+    postCount: 30,
   },
 ];
 
