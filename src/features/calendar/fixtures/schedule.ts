@@ -2,18 +2,11 @@ import type { CalendarEvent } from "../types/types";
 export const scheduleFixture: CalendarEvent[] = [
   {
     id: "e1",
-    title: "HCIL Lab Seminar",
-    location: "302-308",
-    start: "2025-12-13T11:00:00+09:00",
-    end: "2025-12-13T12:30:00+09:00",
+    title: "화니와 여행",
+    location: "강릉",
+    start: "2025-12-21T11:00:00+09:00",
+    end: "2025-12-21T12:30:00+09:00",
     variant: "outlined",
-  },
-  {
-    id: "e2",
-    title: "Dashboard Meeting",
-    start: "2025-12-13T17:00:00+09:00",
-    end: "2025-12-13T18:00:00+09:00",
-    variant: "filled",
   },
 
   // 🎄 Christmas (all-day, yearly)
@@ -34,5 +27,20 @@ export const scheduleFixture: CalendarEvent[] = [
     variant: "outlined",
     allDay: true,
     recurrence: "yearly",
+  },
+  {
+    id: "lesson",
+    title: "피아노 학원",
+    start: "2025-12-18T19:00+09:00",
+    end: "2025-12-18T20:00+09:00",
+    variant: "filled",
+    recurrence: "weekly",
+  },
+  {
+    id: "notice",
+    title: "샤울대 입시 결과 발표",
+    start: "2024-12-15T13:00:00+09:00",
+    end: "2025-12-15T14:00:00+09:00",
+    variant: "outlined",
   },
 ];
