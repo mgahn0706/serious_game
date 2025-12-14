@@ -26,4 +26,13 @@ export const scheduleFixture: CalendarEvent[] = [
     allDay: true,
     recurrence: "yearly",
   },
+  {
+    id: "birth_of_라흐마니노프",
+    title: "라흐마니노프 탄생일",
+    start: "2025-04-01T00:00:00+09:00",
+    end: "2025-04-02T00:00:00+09:00",
+    variant: "outlined",
+    allDay: true,
+    recurrence: "yearly",
+  },
 ];

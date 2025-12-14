@@ -3,6 +3,7 @@ import PostCard from "../../features/instagram/components/PostCard";
 import SidebarSuggestions from "../../features/instagram/components/SidebarSuggestions";
 import StoriesCarousel from "../../features/instagram/components/StoriesCarousel";
 import { posts } from "@/features/instagram/fixtures/posts";
+import { myAccount } from "@/features/instagram/fixtures/account";
 
 export default function Feed() {
   return (
@@ -23,7 +24,10 @@ export default function Feed() {
                 //random
                 return 0.5 - Math.random();
               })
-              .filter((post) => post.algorithmOrder === null)
+              .filter(
+                (post) =>
+                  post.algorithmOrder === null && post.author !== myAccount.id
+              )
               .map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}

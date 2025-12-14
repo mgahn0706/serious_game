@@ -90,4 +90,14 @@ export const posts: Post[] = [
     algorithmOrder: null,
     taggedUserIds: ["jiyoon_pianjy"],
   },
+  {
+    id: "success_jiyoon",
+    author: "jiyoon_pianjy",
+    postImages: ["/instagram/post/success_jiyoon.png"],
+    likes: 15,
+    caption: "드디어 해냈다!!! 🎉🎉🎉",
+    comments: [],
+    timestamp: "1 year ago",
+    algorithmOrder: null,
+  },
 ];
