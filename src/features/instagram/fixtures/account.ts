@@ -45,7 +45,7 @@ const mainAccounts: Account[] = [
     id: "kevin_yoon",
     username: "Kevin Yoon",
     image: "placeholder.jpg",
-    bio: "Travel | Photography | Foodie",
+    bio: "Travel | Photography | Foodie | Merklee College",
     followers: 500,
     following: 910,
     postCount: 15,
