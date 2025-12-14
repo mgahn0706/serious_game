@@ -5,7 +5,7 @@ export const products: Product[] = [
     id: 1,
     title: "Emis 이미스 멀티 포켓 호보백 옐로우",
     price: 45000,
-    location: "신당동 · 꼴릐 ·",
+    location: "신당동",
     time: "2시간 전",
     imageUrl:
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
@@ -30,7 +30,7 @@ export const products: Product[] = [
     id: 2,
     title: "애플워치10 티타늄 골드 42mm",
     price: 500000,
-    location: "신당동 · 꼴릐 ·",
+    location: "신당동",
     time: "2시간 전",
     imageUrl:
       "https://images.unsplash.com/photo-1526434426615-4f1657843c8a?auto=format&fit=crop&w=600&q=80",
@@ -49,7 +49,7 @@ export const products: Product[] = [
     id: 3,
     title: "레이디가구 이안 에디션 드레스룸",
     price: 100000,
-    location: "신당동 · 꼴릐 ·",
+    location: "신당동",
     time: "2시간 전",
     imageUrl:
       "https://images.unsplash.com/photo-1616628188460-8fea8c78d7b7?auto=format&fit=crop&w=600&q=80",

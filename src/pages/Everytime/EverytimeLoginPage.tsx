@@ -19,7 +19,6 @@ export default function EverytimeLoginPage() {
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
-  const [keep, setKeep] = useState(false); // UI only (session-based auth)
   const [error, setError] = useState<string | null>(null);
 
   const trimmedId = id.trim();
