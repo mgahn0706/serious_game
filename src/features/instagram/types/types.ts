@@ -1,7 +1,6 @@
 export interface Post {
   id: string;
   author: string;
-  authorImage: string;
   postImages: string[];
   likes: number;
   caption: string;
@@ -11,11 +10,24 @@ export interface Post {
   taggedUserIds?: string[];
 }
 
-export interface Story {
+export type Story = {
+  id: string | number;
+  userId: string;
+
+  // optional fields if you already have them
+  timeAgo?: string; // e.g. "6시간"
+  items?: StoryItem[];
+  // common alternates people use in fixtures:
+  storyImage?: string;
+  storyImages?: string[];
+};
+
+export type StoryItem = {
   id: string;
-  username: string;
-  storyImage: string;
-}
+  type: "image"; // extend later: "video"
+  src: string;
+  durationMs?: number; // default 5000
+};
 
 export interface Account {
   id: string;

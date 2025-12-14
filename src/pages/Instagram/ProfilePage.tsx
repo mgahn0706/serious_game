@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   UserPlus,
@@ -13,6 +13,7 @@ import {
 import Sidebar from "../../features/instagram/components/Sidebar";
 import { posts } from "@/features/instagram/fixtures/posts";
 import { allAccounts } from "@/features/instagram/fixtures/account";
+import PostModal from "@/features/instagram/components/PostModal"; // ✅ add (path 맞게 조정)
 
 export default function ProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -27,11 +28,24 @@ export default function ProfilePage() {
   const allPosts = posts;
 
   // ✅ filter posts
-  const userPosts = allPosts.filter((post) => post.author === id);
-
-  const taggedPosts = allPosts.filter((post) =>
-    post.taggedUserIds?.includes(id || "")
+  const userPosts = useMemo(
+    () => allPosts.filter((post) => post.author === id),
+    [allPosts, id]
   );
+
+  const taggedPosts = useMemo(
+    () => allPosts.filter((post) => post.taggedUserIds?.includes(id || "")),
+    [allPosts, id]
+  );
+
+  // ✅ modal states
+  const [openPost, setOpenPost] = useState<any | null>(null);
+  const [activeImageIdx, setActiveImageIdx] = useState(0);
+
+  const close = () => {
+    setOpenPost(null);
+    setActiveImageIdx(0);
+  };
 
   if (!account) {
     return (
@@ -96,11 +110,15 @@ export default function ProfilePage() {
                   게시물
                 </span>
                 <span>
-                  <span className="font-semibold">{account.followers}</span>{" "}
+                  <span className="font-semibold">
+                    {formatCount(account.followers)}
+                  </span>{" "}
                   팔로워
                 </span>
                 <span>
-                  <span className="font-semibold">{account.following}</span>{" "}
+                  <span className="font-semibold">
+                    {formatCount(account.following)}
+                  </span>{" "}
                   팔로우
                 </span>
               </div>
@@ -159,7 +177,14 @@ export default function ProfilePage() {
               userPosts.length > 0 ? (
                 <div className="grid grid-cols-3 gap-1 md:gap-4">
                   {userPosts.map((post) => (
-                    <PostGridItem key={post.id} post={post} />
+                    <PostGridItem
+                      key={post.id}
+                      post={post}
+                      onOpen={(p, idx) => {
+                        setOpenPost(p);
+                        setActiveImageIdx(idx);
+                      }}
+                    />
                   ))}
                 </div>
               ) : (
@@ -168,7 +193,14 @@ export default function ProfilePage() {
             ) : taggedPosts.length > 0 ? (
               <div className="grid grid-cols-3 gap-1 md:gap-4">
                 {taggedPosts.map((post) => (
-                  <PostGridItem key={post.id} post={post} />
+                  <PostGridItem
+                    key={post.id}
+                    post={post}
+                    onOpen={(p, idx) => {
+                      setOpenPost(p);
+                      setActiveImageIdx(idx);
+                    }}
+                  />
                 ))}
               </div>
             ) : (
@@ -177,19 +209,83 @@ export default function ProfilePage() {
           </section>
         </div>
       </div>
+
+      {/* ✅ Post Modal */}
+      {openPost && (
+        <PostModal
+          post={openPost}
+          activeImageIdx={activeImageIdx}
+          setActiveImageIdx={setActiveImageIdx}
+          onClose={close}
+        />
+      )}
     </div>
   );
 }
 
 /* ----------------- helpers ----------------- */
 
-function PostGridItem({ post }: { post: any }) {
+function formatCount(v: unknown) {
+  const n =
+    typeof v === "number"
+      ? v
+      : typeof v === "string"
+      ? Number(v.replaceAll(",", ""))
+      : 0;
+
+  if (!Number.isFinite(n)) return "0";
+
+  const abs = Math.abs(n);
+
+  // < 1,000
+  if (abs < 1000) return String(Math.trunc(n));
+
+  // 1,000 ~ 999,999 => K (one decimal when < 10K like 1.2K)
+  if (abs < 1_000_000) {
+    const value = n / 1000;
+    const rounded =
+      Math.abs(value) < 10 ? Math.round(value * 10) / 10 : Math.round(value);
+    return `${trimTrailingZero(rounded)}K`;
+  }
+
+  // 1,000,000 ~ 999,999,999 => M (one decimal when < 10M like 1.2M)
+  if (abs < 1_000_000_000) {
+    const value = n / 1_000_000;
+    const rounded =
+      Math.abs(value) < 10 ? Math.round(value * 10) / 10 : Math.round(value);
+    return `${trimTrailingZero(rounded)}M`;
+  }
+
+  // >= 1B
+  const value = n / 1_000_000_000;
+  const rounded =
+    Math.abs(value) < 10 ? Math.round(value * 10) / 10 : Math.round(value);
+  return `${trimTrailingZero(rounded)}B`;
+}
+
+function trimTrailingZero(v: number) {
+  // 1.0 -> "1", 1.2 -> "1.2"
+  const s = String(v);
+  return s.endsWith(".0") ? s.slice(0, -2) : s;
+}
+
+function PostGridItem({
+  post,
+  onOpen,
+}: {
+  post: any;
+  onOpen: (post: any, idx: number) => void;
+}) {
   const firstImage = post.postImages?.[0] ?? "/placeholder.jpg";
   const likeCount = post.likes ?? 0;
   const commentCount = post.comments?.length ?? 0;
 
   return (
-    <div className="relative group aspect-square bg-muted cursor-pointer">
+    <button
+      type="button"
+      onClick={() => onOpen(post, 0)}
+      className="relative group aspect-square bg-muted cursor-pointer text-left"
+    >
       <img src={firstImage} alt="" className="w-full h-full object-cover" />
       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-6 text-white text-sm font-semibold">
         <div className="flex items-center gap-1">
@@ -201,7 +297,7 @@ function PostGridItem({ post }: { post: any }) {
           <span>{commentCount}</span>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

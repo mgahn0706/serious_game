@@ -3,17 +3,20 @@ import type { Story } from "../types/types";
 export const stories: Story[] = [
   {
     id: "1",
-    username: "kim_hwan",
-    storyImage: "/story_example.png",
+    userId: "kim_hwan",
+    storyImage: "/instagram/story/stories-1.png",
+    timeAgo: "1시간",
   },
   {
     id: "2",
-    username: "nvidia",
-    storyImage: "/story_example2.png",
+    userId: "nvidia",
+    storyImage: "/instagram/story/stories-2.png",
+    timeAgo: "2시간",
   },
   {
     id: "3",
-    username: "gusty_park",
-    storyImage: "/story_example3.png",
+    userId: "gusty_park",
+    storyImage: "/instagram/story/stories-3.png",
+    timeAgo: "1시간",
   },
 ];

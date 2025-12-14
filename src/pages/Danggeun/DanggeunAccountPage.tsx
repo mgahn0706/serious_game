@@ -212,18 +212,26 @@ export default function DanggeunAccountPage() {
         <MessageCircle className="h-7 w-7" />
       </button>
 
-      {/* ✅ resolvedChat 기반 렌더 */}
-      {chatOpen && resolvedChat && (
-        <DanggeunChatModalReadOnly
-          onClose={() => setChatOpen(false)}
-          partner={resolvedChat.partner}
-          temperatureText={resolvedChat.temperatureText}
-          responseHint={resolvedChat.thread.responseHint}
-          dateLabel={resolvedChat.thread.dateLabel}
-          messages={resolvedChat.thread.messages}
-          isRestricted={isRestricted}
-        />
-      )}
+      {/* ✅ 채팅: 있으면 채팅, 없으면 "채팅 없음" 모달 */}
+      {chatOpen &&
+        (resolvedChat ? (
+          <DanggeunChatModalReadOnly
+            onClose={() => setChatOpen(false)}
+            partner={resolvedChat.partner}
+            temperatureText={resolvedChat.temperatureText}
+            responseHint={resolvedChat.thread.responseHint}
+            dateLabel={resolvedChat.thread.dateLabel}
+            messages={resolvedChat.thread.messages}
+            isRestricted={isRestricted}
+          />
+        ) : (
+          <DanggeunChatModalEmpty
+            onClose={() => setChatOpen(false)}
+            partner={account}
+            temperatureText={`${account.temperature.toFixed(1)}°C`}
+            isRestricted={isRestricted}
+          />
+        ))}
 
       {modalOpen && isRestricted && (
         <RestrictedModal
@@ -388,6 +396,96 @@ function DanggeunChatModalReadOnly({
               </div>
             </div>
           )}
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-black/5" />
+      </div>
+    </div>
+  );
+}
+
+/* ================= CHAT MODAL (EMPTY) ================= */
+
+function DanggeunChatModalEmpty({
+  onClose,
+  partner,
+  temperatureText,
+  isRestricted,
+}: {
+  onClose: () => void;
+  partner: Account;
+  temperatureText: string;
+  isRestricted: boolean;
+}) {
+  return (
+    <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/40 p-6">
+      <div className="relative w-full max-w-[1100px] overflow-hidden rounded-[28px] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.25)]">
+        {/* Header */}
+        <div className="flex items-center justify-between px-8 py-5">
+          <div className="flex items-center gap-4">
+            <img
+              src={partner.avatarUrl}
+              className="h-10 w-10 rounded-full object-cover"
+              alt="avatar"
+            />
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="text-[18px] font-bold text-[#111]">
+                  {partner.username}
+                </div>
+                <div className="rounded-full border border-[#d9d9d9] bg-white px-2 py-0.5 text-[12px] font-semibold text-[#444]">
+                  {temperatureText}
+                </div>
+              </div>
+              <div className="text-[13px] text-[#9a9a9a]">
+                채팅 내역이 없어요
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-black/5 active:bg-black/10 cursor-pointer"
+            aria-label="close"
+          >
+            <X className="h-5 w-5 text-[#333]" />
+          </button>
+        </div>
+
+        <div className="h-px bg-[#efefef]" />
+
+        {/* Body */}
+        <div className="relative h-[680px] bg-white">
+          <div className="h-full px-12 py-12 flex items-center justify-center">
+            <div className="max-w-md text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#fff1e8]">
+                <MessageCircle className="h-7 w-7 text-[#ff6f0f]" />
+              </div>
+              <div className="text-[18px] font-bold text-[#111]">
+                아직 대화가 없어요
+              </div>
+              <div className="mt-2 text-[14px] leading-6 text-[#6b6b6b]">
+                이 판매자와 진행한 채팅이 없습니다.
+              </div>
+
+              {isRestricted && (
+                <div className="mt-6 rounded-[14px] border border-[#f1c7c7] bg-[#fff7f7] px-5 py-4 text-[14px] text-[#a13b3b] text-left">
+                  경찰 수사로 인해 <b>메시지 전송 기능이 제한</b>되었습니다.
+                  (열람만 가능)
+                </div>
+              )}
+
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="rounded-xl border border-[#e6e6e6] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#333] hover:bg-black/[0.03]"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-black/5" />

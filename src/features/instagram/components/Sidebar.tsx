@@ -63,18 +63,67 @@ export default function Sidebar() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // 🔍 SEARCH LOGIC (id + username)
+  // 🔍 SEARCH LOGIC (Instagram-ish: prefix-first, fallback to includes)
   const trimmed = query.trim();
+  const q = trimmed.toLowerCase();
+
   const searchResults =
-    trimmed.length === 0
+    q.length === 0
       ? []
-      : allAccounts.filter((acc) => {
-          const q = trimmed.toLowerCase();
-          return (
-            acc.id.toLowerCase().includes(q) ||
-            acc.username?.toLowerCase().includes(q)
-          );
-        });
+      : (() => {
+          // 1) prefix match first (id/username)
+          const prefix = allAccounts
+            .filter((acc) => {
+              const id = acc.id.toLowerCase();
+              const username = (acc.username ?? "").toLowerCase();
+              return id.startsWith(q) || username.startsWith(q);
+            })
+            // within prefix, stronger first: exact id > id prefix > username prefix
+            .sort((a, b) => {
+              const aId = a.id.toLowerCase();
+              const bId = b.id.toLowerCase();
+              const aUser = (a.username ?? "").toLowerCase();
+              const bUser = (b.username ?? "").toLowerCase();
+
+              const aScore =
+                (aId === q ? 0 : aId.startsWith(q) ? 1 : 3) +
+                (aUser.startsWith(q) ? 0.5 : 0);
+              const bScore =
+                (bId === q ? 0 : bId.startsWith(q) ? 1 : 3) +
+                (bUser.startsWith(q) ? 0.5 : 0);
+
+              if (aScore !== bScore) return aScore - bScore;
+              if (a.id.length !== b.id.length) return a.id.length - b.id.length;
+              return a.id.localeCompare(b.id);
+            });
+
+          if (prefix.length > 0) return prefix.slice(0, 20);
+
+          // 2) only if no prefix matches: includes fallback
+          const includes = allAccounts
+            .filter((acc) => {
+              const id = acc.id.toLowerCase();
+              const username = (acc.username ?? "").toLowerCase();
+              return id.includes(q) || username.includes(q);
+            })
+            .sort((a, b) => {
+              const aId = a.id.toLowerCase();
+              const bId = b.id.toLowerCase();
+              const aUser = (a.username ?? "").toLowerCase();
+              const bUser = (b.username ?? "").toLowerCase();
+
+              const aScore =
+                (aId.includes(q) ? 0 : 2) + (aUser.includes(q) ? 0.5 : 0);
+              const bScore =
+                (bId.includes(q) ? 0 : 2) + (bUser.includes(q) ? 0.5 : 0);
+
+              if (aScore !== bScore) return aScore - bScore;
+              if (a.id.length !== b.id.length) return a.id.length - b.id.length;
+              return a.id.localeCompare(b.id);
+            });
+
+          return includes.slice(0, 20);
+        })();
 
   return (
     <>
@@ -143,7 +192,7 @@ export default function Sidebar() {
           >
             <div className="w-6 h-6 rounded-full overflow-hidden bg-muted flex-shrink-0">
               <img
-                src="/image/instagram/profile_example.jpg"
+                src="/instagram/profile/placeholder.png"
                 alt={MY_USERNAME}
                 className="w-full h-full object-cover"
               />

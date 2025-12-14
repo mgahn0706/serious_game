@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Heart,
   MessageCircle,
@@ -10,42 +10,46 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-
-interface Comment {
-  author: string;
-  text: string;
-}
+import type { Post } from "../types/types";
+import { allAccounts } from "../fixtures/account";
+import { NavLink } from "react-router-dom";
 
 interface PostCardProps {
-  author: string;
-  authorImage: string;
-  postImages: string[];
-  likes: number;
-  caption: string;
-  comments: Comment[];
-  timestamp: string;
+  post: Post;
 }
 
-export default function PostCard({
-  author,
-  authorImage,
-  postImages,
-  likes,
-  caption,
-  comments,
-  timestamp,
-}: PostCardProps) {
+export default function PostCard({ post }: PostCardProps) {
+  const {
+    author,
+    postImages = [],
+    likes,
+    caption,
+    comments = [],
+    timestamp,
+  } = post;
+
+  const authorAccount = useMemo(() => {
+    return allAccounts.find((acc) => String(acc.id) === String(author));
+  }, [author]);
+
+  const authorImage = authorAccount?.image || "/placeholder.jpg";
+
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [currentLikes, setCurrentLikes] = useState(likes);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // ✅ derived likes (no double update bug)
+  const displayedLikes = useMemo(() => {
+    const base = typeof likes === "number" ? likes : 0;
+    return base + (isLiked ? 1 : 0);
+  }, [likes, isLiked]);
+
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    setCurrentLikes(isLiked ? currentLikes - 1 : currentLikes + 1);
+    setIsLiked((prev) => !prev);
   };
 
   const handleImageNav = (direction: "prev" | "next") => {
+    if (postImages.length <= 1) return;
     if (direction === "prev") {
       setCurrentImageIndex((prev) =>
         prev === 0 ? postImages.length - 1 : prev - 1
@@ -61,9 +65,12 @@ export default function PostCard({
     <div className="bg-background py-0 border-b border-border">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
+        <NavLink
+          to={`/instagram/profile/${author}`}
+          className="flex items-center gap-3"
+        >
           <img
-            src={authorImage || "/placeholder.jpg"}
+            src={authorImage}
             alt={author}
             className="w-10 h-10 rounded-full object-cover"
           />
@@ -71,7 +78,8 @@ export default function PostCard({
             <p className="font-semibold text-sm">{author}</p>
             <p className="text-xs text-muted-foreground">{timestamp}</p>
           </div>
-        </div>
+        </NavLink>
+
         <button className="hover:bg-secondary p-2 rounded-full transition-colors">
           <MoreHorizontal className="w-5 h-5 text-foreground" />
         </button>
@@ -88,27 +96,32 @@ export default function PostCard({
         {postImages.length > 1 && (
           <>
             <button
+              type="button"
               onClick={() => handleImageNav("prev")}
               className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
+              type="button"
               onClick={() => handleImageNav("next")}
               className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
 
-            {/* Image indicator dots */}
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
               {postImages.map((_, idx) => (
                 <button
+                  type="button"
                   key={idx}
                   onClick={() => setCurrentImageIndex(idx)}
                   className={`w-2 h-2 rounded-full transition-colors ${
                     idx === currentImageIndex ? "bg-white" : "bg-white/50"
                   }`}
+                  aria-label={`Go to image ${idx + 1}`}
                 />
               ))}
             </div>
@@ -120,8 +133,10 @@ export default function PostCard({
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
           <button
+            type="button"
             onClick={handleLike}
             className="hover:opacity-70 transition-opacity"
+            aria-label="Like"
           >
             <Heart
               className={`w-6 h-6 ${
@@ -129,16 +144,29 @@ export default function PostCard({
               }`}
             />
           </button>
-          <button className="hover:opacity-70 transition-opacity">
+
+          <button
+            type="button"
+            className="hover:opacity-70 transition-opacity"
+            aria-label="Comment"
+          >
             <MessageCircle className="w-6 h-6 text-foreground" />
           </button>
-          <button className="hover:opacity-70 transition-opacity">
+
+          <button
+            type="button"
+            className="hover:opacity-70 transition-opacity"
+            aria-label="Share"
+          >
             <Share2 className="w-6 h-6 text-foreground" />
           </button>
         </div>
+
         <button
-          onClick={() => setIsSaved(!isSaved)}
+          type="button"
+          onClick={() => setIsSaved((s) => !s)}
           className="hover:opacity-70 transition-opacity"
+          aria-label="Save"
         >
           <Bookmark
             className={`w-6 h-6 ${
@@ -151,7 +179,7 @@ export default function PostCard({
       {/* Likes */}
       <div className="px-4">
         <p className="font-semibold text-sm">
-          좋아요 {currentLikes.toLocaleString()}개
+          좋아요 {displayedLikes.toLocaleString()}개
         </p>
       </div>
 
@@ -174,21 +202,8 @@ export default function PostCard({
         </div>
       )}
 
-      {/* Comments link */}
-      <div className="px-4 py-2 text-sm text-muted-foreground cursor-pointer hover:text-foreground">
+      <div className="px-4 py-2 text-sm text-muted-foreground cursor-pointer hover:text-foreground mb-4">
         댓글 모두 보기
-      </div>
-
-      {/* Comment input */}
-      <div className="flex items-center gap-3 px-4 py-3 border-t border-border">
-        <input
-          type="text"
-          placeholder="댓글 달기..."
-          className="flex-1 bg-transparent text-sm outline-none placeholder-muted-foreground"
-        />
-        <button className="text-primary font-semibold text-sm hover:text-primary/80">
-          게시
-        </button>
       </div>
     </div>
   );

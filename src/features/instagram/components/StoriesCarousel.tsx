@@ -45,9 +45,7 @@ export default function StoriesCarousel() {
       <div className="bg-background border-b border-border p-4 relative">
         <div className="flex gap-4 pb-2 overflow-x-hidden" ref={containerRef}>
           {storyList.map((story: any) => {
-            const account = allAccounts.find(
-              (acc) => acc.username === story.username
-            );
+            const account = allAccounts.find((acc) => acc.id === story.userId);
             return (
               <button
                 key={story.id}
@@ -65,15 +63,17 @@ export default function StoriesCarousel() {
                 >
                   <div className="w-full h-full rounded-full bg-white p-[3px] overflow-hidden">
                     <img
-                      src={account?.image || "/placeholder.jpg"}
-                      alt={story.username}
+                      src={
+                        account?.image || "/instagram/profile/placeholder.png"
+                      }
+                      alt={account?.username || "user"}
                       className="w-full h-full object-cover rounded-full"
                     />
                   </div>
                 </div>
 
                 <span className="text-xs font-medium truncate w-16 text-center text-foreground">
-                  {story.username}
+                  {account?.id || "unknown"}
                 </span>
               </button>
             );

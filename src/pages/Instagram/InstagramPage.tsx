@@ -18,9 +18,15 @@ export default function Feed() {
 
           {/* Posts */}
           <div className="divide-y divide-border">
-            {posts.map((post) => (
-              <PostCard key={post.id} {...post} />
-            ))}
+            {posts
+              .sort((a, b) => {
+                //random
+                return 0.5 - Math.random();
+              })
+              .filter((post) => post.algorithmOrder === null)
+              .map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
           </div>
         </div>
 

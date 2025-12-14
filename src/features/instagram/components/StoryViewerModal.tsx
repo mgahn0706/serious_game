@@ -13,39 +13,26 @@ import {
   Heart,
   Plus,
 } from "lucide-react";
-
-type StoryItem = {
-  id: string;
-  type: "image"; // extend later: "video"
-  src: string;
-  durationMs?: number; // default 5000
-};
-
-export type Story = {
-  id: string | number;
-  username: string;
-  image?: string; // avatar
-  hasStory?: boolean;
-
-  // optional fields if you already have them
-  timeAgo?: string; // e.g. "6시간"
-  // story content (we normalize below)
-  items?: StoryItem[];
-
-  // common alternates people use in fixtures:
-  storyImage?: string;
-  storyImages?: string[];
-};
+import type { Story, StoryItem } from "../types/types";
+import { allAccounts } from "../fixtures/account";
+import { NavLink } from "react-router-dom";
 
 function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
 }
 
-function normalizeStoryItems(story: Story): StoryItem[] {
-  // If your fixture already has items, use them
+/**
+ * StoryItem list normalization:
+ * - items 있으면 items 사용
+ * - storyImages/storyImage 있으면 그걸로 image item 생성
+ * - 마지막 fallback은 avatar(계정 이미지)로 처리하도록, 외부에서 avatarFallback을 주입
+ */
+function normalizeStoryItems(
+  story: Story,
+  avatarFallback: string
+): StoryItem[] {
   if (story.items && story.items.length > 0) return story.items;
 
-  // Otherwise, fall back to common fields
   if (story.storyImages && story.storyImages.length > 0) {
     return story.storyImages.map((src, idx) => ({
       id: `${story.id}-img-${idx}`,
@@ -66,12 +53,12 @@ function normalizeStoryItems(story: Story): StoryItem[] {
     ];
   }
 
-  // Last fallback: just show the avatar as story content (so it never breaks)
+  // ✅ never break: show avatar as story content
   return [
     {
       id: `${story.id}-fallback`,
       type: "image",
-      src: story.image || "/placeholder.jpg",
+      src: avatarFallback || "/placeholder.jpg",
       durationMs: 5000,
     },
   ];
@@ -86,6 +73,30 @@ export default function StoryViewerModal({
   initialStoryId: string;
   onClose: () => void;
 }) {
+  // ✅ userId -> account lookup map (Story.userId === account.id 기준)
+  const accountById = useMemo(() => {
+    const m = new Map<string, (typeof allAccounts)[number]>();
+    for (const acc of allAccounts) {
+      m.set(String(acc.id), acc);
+    }
+    return m;
+  }, []);
+
+  const getAccountByUserId = (userId?: string) => {
+    if (!userId) return undefined;
+    return accountById.get(String(userId));
+  };
+
+  const getAvatarByUserId = (userId?: string) => {
+    return getAccountByUserId(userId)?.image || "/placeholder.jpg";
+  };
+
+  const getDisplayNameByUserId = (userId?: string) => {
+    const acc = getAccountByUserId(userId);
+    // 인스타처럼 위에는 보통 id(핸들)가 뜸. 없으면 username 등 fallback
+    return acc?.id || acc?.username || String(userId ?? "");
+  };
+
   const storyIndex0 = useMemo(() => {
     const idx = stories.findIndex(
       (s) => String(s.id) === String(initialStoryId)
@@ -103,52 +114,58 @@ export default function StoryViewerModal({
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number | null>(null);
 
-  const currentStory = stories[clamp(storyIdx, 0, stories.length - 1)];
-  const currentItems = useMemo(
-    () => normalizeStoryItems(currentStory),
-    [currentStory]
+  const safeStoryIdx = clamp(storyIdx, 0, Math.max(0, stories.length - 1));
+  const currentStory = stories[safeStoryIdx];
+
+  const currentAvatar = useMemo(
+    () => getAvatarByUserId(currentStory?.userId),
+    [currentStory?.userId, accountById]
   );
-  const currentItem = currentItems[clamp(itemIdx, 0, currentItems.length - 1)];
+
+  const currentItems = useMemo(
+    () => normalizeStoryItems(currentStory, currentAvatar),
+    [currentStory, currentAvatar]
+  );
+
+  const safeItemIdx = clamp(itemIdx, 0, Math.max(0, currentItems.length - 1));
+  const currentItem = currentItems[safeItemIdx];
   const durationMs = currentItem?.durationMs ?? 5000;
 
   // side previews
-  const prevStory = storyIdx > 0 ? stories[storyIdx - 1] : null;
+  const prevStory = safeStoryIdx > 0 ? stories[safeStoryIdx - 1] : null;
   const nextStory =
-    storyIdx < stories.length - 1 ? stories[storyIdx + 1] : null;
+    safeStoryIdx < stories.length - 1 ? stories[safeStoryIdx + 1] : null;
 
   const goPrev = () => {
-    // prev item if possible, otherwise prev story (last item)
     if (itemIdx > 0) {
       setItemIdx((x) => x - 1);
       setProgress(0);
       return;
     }
-    if (storyIdx > 0) {
-      const newStoryIdx = storyIdx - 1;
-      const items = normalizeStoryItems(stories[newStoryIdx]);
+    if (safeStoryIdx > 0) {
+      const newStoryIdx = safeStoryIdx - 1;
+      const avatar = getAvatarByUserId(stories[newStoryIdx]?.userId);
+      const items = normalizeStoryItems(stories[newStoryIdx], avatar);
       setStoryIdx(newStoryIdx);
       setItemIdx(Math.max(0, items.length - 1));
       setProgress(0);
       return;
     }
-    // if at very beginning, just restart
     setProgress(0);
   };
 
   const goNext = () => {
-    // next item if possible, otherwise next story (first item)
     if (itemIdx < currentItems.length - 1) {
       setItemIdx((x) => x + 1);
       setProgress(0);
       return;
     }
-    if (storyIdx < stories.length - 1) {
+    if (safeStoryIdx < stories.length - 1) {
       setStoryIdx((x) => x + 1);
       setItemIdx(0);
       setProgress(0);
       return;
     }
-    // end reached -> close like IG
     onClose();
   };
 
@@ -163,13 +180,13 @@ export default function StoryViewerModal({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storyIdx, itemIdx, currentItems.length, onClose]);
+  }, [safeStoryIdx, itemIdx, currentItems.length, onClose]);
 
   // reset when story changes
   useEffect(() => {
     setItemIdx(0);
     setProgress(0);
-  }, [storyIdx]);
+  }, [safeStoryIdx]);
 
   // progress player
   useEffect(() => {
@@ -185,11 +202,7 @@ export default function StoryViewerModal({
       const dt = ts - lastTsRef.current;
       lastTsRef.current = ts;
 
-      setProgress((p) => {
-        const np = p + dt / durationMs;
-        return np;
-      });
-
+      setProgress((p) => p + dt / durationMs);
       rafRef.current = requestAnimationFrame(tick);
     };
 
@@ -210,7 +223,17 @@ export default function StoryViewerModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress]);
 
-  const timeAgo = currentStory.timeAgo ?? "6시간";
+  const timeAgo = currentStory?.timeAgo ?? "6시간";
+  const currentDisplayName = getDisplayNameByUserId(currentStory?.userId);
+
+  // ✅ preview helper: story의 첫 item 또는 avatar 보여주기
+  const previewSrc = (s: Story) => {
+    const avatar = getAvatarByUserId(s.userId);
+    const items = normalizeStoryItems(s, avatar);
+    return items[0]?.src || avatar || "/placeholder.jpg";
+  };
+
+  const previewName = (s: Story) => getDisplayNameByUserId(s.userId);
 
   return (
     <div className="fixed inset-0 z-[999] bg-black/90 flex items-center justify-center">
@@ -228,18 +251,14 @@ export default function StoryViewerModal({
           {prevStory ? (
             <div className="relative w-[180px] h-[320px] rounded-2xl overflow-hidden bg-white/5 border border-white/10">
               <img
-                src={
-                  normalizeStoryItems(prevStory)[0]?.src ||
-                  prevStory.image ||
-                  "/placeholder.jpg"
-                }
-                alt={`${prevStory.username} preview`}
+                src={previewSrc(prevStory)}
+                alt={`${previewName(prevStory)} preview`}
                 className="w-full h-full object-cover opacity-70"
               />
               <div className="absolute inset-0 bg-black/30" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white/80 text-sm font-medium">
-                  {prevStory.username}
+                  {previewName(prevStory)}
                 </span>
               </div>
             </div>
@@ -255,7 +274,11 @@ export default function StoryViewerModal({
             <div className="flex gap-1.5">
               {currentItems.map((_, i) => {
                 const filled =
-                  i < itemIdx ? 1 : i === itemIdx ? clamp(progress, 0, 1) : 0;
+                  i < safeItemIdx
+                    ? 1
+                    : i === safeItemIdx
+                    ? clamp(progress, 0, 1)
+                    : 0;
                 return (
                   <div
                     key={i}
@@ -272,22 +295,24 @@ export default function StoryViewerModal({
 
             {/* Header */}
             <div className="mt-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-white/10">
-                  <img
-                    src={currentStory.image || "/placeholder.jpg"}
-                    alt={currentStory.username}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+              <NavLink to={`/instagram/profile/${currentStory?.userId}`}>
                 <div className="flex items-center gap-2">
-                  <span className="text-white text-sm font-semibold">
-                    {currentStory.username}
-                  </span>
-                  <span className="text-white/70 text-xs">{timeAgo}</span>
-                </div>
-              </div>
+                  <div className="w-8 h-8 rounded-full overflow-hidden bg-white/10">
+                    <img
+                      src={currentAvatar}
+                      alt={currentDisplayName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
 
+                  <div className="flex items-center gap-2">
+                    <span className="text-white text-sm font-semibold">
+                      {currentDisplayName}
+                    </span>
+                    <span className="text-white/70 text-xs">{timeAgo}</span>
+                  </div>
+                </div>
+              </NavLink>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
@@ -328,7 +353,6 @@ export default function StoryViewerModal({
               className="w-full h-full object-cover"
               draggable={false}
             />
-            {/* subtle top/bottom gradients like IG */}
             <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/50 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/55 to-transparent" />
           </div>
@@ -382,8 +406,8 @@ export default function StoryViewerModal({
             </div>
           </div>
 
-          {/* Left/Right chevrons on the panel (like desktop IG) */}
-          {storyIdx > 0 && (
+          {/* Left/Right chevrons on the panel */}
+          {safeStoryIdx > 0 && (
             <button
               type="button"
               onClick={goPrev}
@@ -393,7 +417,7 @@ export default function StoryViewerModal({
               <ChevronLeft className="w-5 h-5" />
             </button>
           )}
-          {storyIdx < stories.length - 1 && (
+          {safeStoryIdx < stories.length - 1 && (
             <button
               type="button"
               onClick={goNext}
@@ -410,18 +434,14 @@ export default function StoryViewerModal({
           {nextStory ? (
             <div className="relative w-[180px] h-[320px] rounded-2xl overflow-hidden bg-white/5 border border-white/10">
               <img
-                src={
-                  normalizeStoryItems(nextStory)[0]?.src ||
-                  nextStory.image ||
-                  "/placeholder.jpg"
-                }
-                alt={`${nextStory.username} preview`}
+                src={previewSrc(nextStory)}
+                alt={`${previewName(nextStory)} preview`}
                 className="w-full h-full object-cover opacity-70"
               />
               <div className="absolute inset-0 bg-black/30" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white/80 text-sm font-medium">
-                  {nextStory.username}
+                  {previewName(nextStory)}
                 </span>
               </div>
             </div>
@@ -429,28 +449,6 @@ export default function StoryViewerModal({
             <div className="w-[180px] h-[320px]" />
           )}
         </div>
-
-        {/* Big outer arrows (like screenshot) */}
-        {/* {prevStory && (
-          <button
-            type="button"
-            onClick={goPrev}
-            className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-[1100] w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 items-center justify-center text-white"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-        )}
-        {nextStory && (
-          <button
-            type="button"
-            onClick={goNext}
-            className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-[1100] w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 items-center justify-center text-white"
-            aria-label="Next"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        )} */}
       </div>
     </div>
   );

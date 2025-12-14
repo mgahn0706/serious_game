@@ -134,7 +134,7 @@ export default function LoginPage() {
                       '"Billabong","Instagram Sans Script","Segoe Script","Brush Script MT",cursive',
                   }}
                 >
-                  Instagram
+                  Instakilogram
                 </div>
               </div>
 
