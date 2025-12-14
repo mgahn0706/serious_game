@@ -17,4 +17,13 @@ export const accounts: Account[] = [
     avatarUrl:
       "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200",
   },
+  {
+    id: 3,
+    username: "냥냥이",
+    location: "강남구",
+    temperature: 0,
+    avatarUrl:
+      "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?w=200",
+    isRestricted: true,
+  },
 ];

@@ -4,6 +4,7 @@ export type Account = {
   location: string;
   temperature: number; // 매너온도
   avatarUrl: string;
+  isRestricted?: boolean;
 };
 
 export type Product = {
