@@ -54,7 +54,7 @@ const mainAccounts: Account[] = [
     id: "yoon_music_s2",
     username: "샤울특별시 Yoon 피아노 학원",
     image: "/instagram/profile/placeholder.png",
-    bio: "샤울대입구역 3번 출구 피아노 레슨 전문 학원입니다. 모든 연령대 환영! 유학 레슨 가능.",
+    bio: "샤울대입구역 3번 출구 1F 피아노 레슨 전문 학원입니다. 모든 연령대 환영! 유학 레슨 가능.",
     followers: 134,
     following: 12,
     postCount: 20,

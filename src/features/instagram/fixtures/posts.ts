@@ -93,7 +93,10 @@ export const posts: Post[] = [
   {
     id: "success_jiyoon",
     author: "jiyoon_pianjy",
-    postImages: ["/instagram/post/success_jiyoon.png"],
+    postImages: [
+      "/instagram/post/success_jiyoon-1.png",
+      "/instagram/post/success_jiyoon-2.png",
+    ],
     likes: 15,
     caption: "드디어 해냈다!!! 🎉🎉🎉",
     comments: [],
@@ -101,11 +104,22 @@ export const posts: Post[] = [
     algorithmOrder: null,
   },
   {
+    id: "dream",
+    author: "jiyoon_pianjy",
+    postImages: ["/instagram/post/dream-1.png", "/instagram/post/dream-2.png"],
+    likes: 2,
+    caption:
+      "나의 꿈을 향해 한 걸음 더. 실용음악이 하고 싶지만, 나 스스로 빼고는 아무도 관심은 없어보인다. 그래도 난 포기하지 않을거야. 두번째 사진은 나 어렸을 때",
+    comments: [],
+    timestamp: "1 years ago",
+    algorithmOrder: null,
+  },
+  {
     id: "yoon-map",
     author: "yoon_music_s2",
     postImages: ["/instagram/post/yoon-map.png"],
     likes: 2,
-    caption: "우리 학원 위치 안내🗺️ 샤울대입구역 3번출구 앞!",
+    caption: "우리 학원 위치 안내🗺️ 샤울대입구역 3번출구 앞 1층!",
     comments: [],
     timestamp: "2 years ago",
     algorithmOrder: null,
@@ -115,7 +129,7 @@ export const posts: Post[] = [
     author: "yoon_music_s2",
     postImages: ["/instagram/post/yoon-timetable.png"],
     likes: 3,
-    caption: "2025년 시간표 안내",
+    caption: "2025년 Kevin Yoon 담당 시간표 안내",
     comments: [],
     timestamp: "10 months ago",
     algorithmOrder: null,
@@ -137,6 +151,31 @@ export const posts: Post[] = [
     algorithmOrder: 5,
   },
   {
+    id: "wifi",
+    author: "yoon_music_s2",
+    postImages: ["/instagram/post/wifi.png"],
+    likes: 10,
+    caption: "학원에서는 최고급 피아노가 대기중입니다🎹 실음과 연습도 환영",
+    comments: [],
+    timestamp: "4 months ago",
+    algorithmOrder: null,
+  },
+  {
+    id: "meme",
+    author: "agro_ggun",
+    postImages: [
+      "/instagram/post/meme-1.png",
+      "/instagram/post/meme-2.png",
+      "/instagram/post/meme-3.png",
+      "/instagram/post/meme-4.png",
+    ],
+    likes: 150,
+    caption: "웃긴 가족 카톡 모음ㅋㅋㅋㅋ",
+    comments: [],
+    timestamp: "3 days ago",
+    algorithmOrder: 9,
+  },
+  {
     id: "namyangju_star",
     author: "namyangju_star",
     postImages: [
@@ -151,4 +190,9 @@ export const posts: Post[] = [
   },
 ];
 
-export const mainPagePostIds = ["nvidia_post", "hwan_general", "agro_post"];
+export const mainPagePostIds = [
+  "nvidia_post",
+  "hwan_general",
+  "agro_post",
+  "meme",
+];

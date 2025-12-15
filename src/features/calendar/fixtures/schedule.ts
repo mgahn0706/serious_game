@@ -45,7 +45,7 @@ export const scheduleFixture: CalendarEvent[] = [
   },
   {
     id: "notice",
-    title: "밴드 결성일",
+    title: "Five Directions 밴드 결성일",
     start: "2025-07-13T13:00:00+09:00",
     end: "2025-07-13T14:00:00+09:00",
     variant: "outlined",

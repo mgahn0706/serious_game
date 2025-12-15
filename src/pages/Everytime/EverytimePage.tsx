@@ -32,7 +32,16 @@ export default function EverytimePage() {
     );
   }, [boardId]);
 
-  const posts = board.posts;
+  // ✅ createdAt 기준 최신순 정렬 (내림차순)
+  const posts = useMemo(() => {
+    return board.posts
+      .slice()
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+  }, [board.posts]);
+
   const normalized = searchTerm.trim().toLowerCase();
 
   const filteredPosts = useMemo(() => {

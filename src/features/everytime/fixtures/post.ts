@@ -423,7 +423,7 @@ export const everytimeData: EverytimeData = {
           preview:
             "사기꾼 계좌라는데 본인이 강남역에서 보자고 함ㅋㅋㅋ 진짜 나오나?",
           body: `
-농협 123-1212-123456
+유리은행 123-1212-123456
 이거 당근마켓 사기꾼 계좌라던데,
 
 지금 강남역에서 보잔다 ㅋㅋㅋㅋㅋ 저녁 7시에 강남역에서 보자는거부터 수상함
@@ -702,6 +702,44 @@ export const everytimeData: EverytimeData = {
               content: "이거 ㄹㅇ 공포썰 각인데 후기 좀",
               createdAt: "2025-12-18",
               likeCount: 37,
+            },
+          ],
+        },
+        {
+          id: asPostId("209"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title: "아 화난다",
+          preview:
+            "피아노 레쓴쌤 오늘까지 유학 접수 마감인데 갑자기 전화 안받음",
+          body: `
+피아노 레쓴쌤 오늘까지 유학 접수 마감인데 갑자기 전화 안받음
+뭐야 진짜 화난다
+한국 시간 밤 11시 마감인데, 아까 저녁 8시부터 연락 아예 안되고 카톡도 안보네
+`,
+          createdAt: "2025-12-18",
+          likeCount: 6,
+          comments: [
+            {
+              id: asCommentId("1040"),
+              author: { nickname: "익1", isAnonymous: true },
+              content: "맡겨놨냐? 알아서 해",
+              createdAt: "2025-12-18",
+              likeCount: 64,
+            },
+            {
+              id: asCommentId("1039"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "레슨 있는거 아님?",
+              createdAt: "2025-12-18",
+              likeCount: 51,
+            },
+            {
+              id: asCommentId("1040"),
+              author: { nickname: "익3", isAnonymous: true },
+              content: "그걸 왜 에타에서 한탄함",
+              createdAt: "2025-12-18",
+              likeCount: 48,
             },
           ],
         },

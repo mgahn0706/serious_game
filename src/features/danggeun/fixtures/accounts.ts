@@ -19,7 +19,7 @@ export const accounts: Account[] = [
   },
   {
     id: 3,
-    username: "환의",
+    username: "의환",
     location: "삼성동",
     temperature: 0,
     avatarUrl:

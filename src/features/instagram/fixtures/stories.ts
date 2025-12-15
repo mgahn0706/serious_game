@@ -25,4 +25,10 @@ export const stories: Story[] = [
     storyImage: "/instagram/story/story-clue.png",
     timeAgo: "3분",
   },
+  {
+    id: "5",
+    userId: "kevin_yoon",
+    storyImage: "/instagram/story/story-alibi.png",
+    timeAgo: "2시간",
+  },
 ];
