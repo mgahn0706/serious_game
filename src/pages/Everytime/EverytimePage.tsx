@@ -21,7 +21,7 @@ export default function EverytimePage() {
 
   // ✅ pagination
   const [page, setPage] = useState(1);
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 10;
 
   // ✅ 현재 선택된 board 결정 (없으면 0번 fallback)
   const board: EverytimeBoard = useMemo(() => {

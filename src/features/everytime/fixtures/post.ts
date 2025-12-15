@@ -371,7 +371,7 @@ export const everytimeData: EverytimeData = {
       title: "자유게시판",
       posts: [
         // ===============================
-        // 0) moonlight_vocal - 당근마켓 사기 경험 공유
+        // 0) moonlight_vocal - 당근마켓 사기 경험 공유 (정보글, 좋아요 낮음)
         // ===============================
         {
           id: asPostId("201"),
@@ -392,12 +392,27 @@ export const everytimeData: EverytimeData = {
 저처럼 멘탈 흔들려서 급하게 결제하지 마세요... 내 스피커 ㅠㅠ
 `,
           createdAt: "2025-12-12",
-          likeCount: 0,
-          comments: [],
+          likeCount: 8,
+          comments: [
+            {
+              id: asCommentId("1020"),
+              author: { nickname: "익명", isAnonymous: true },
+              content: "이런 글이 진짜 도움됨… 나도 비슷하게 당할 뻔",
+              createdAt: "2025-12-12",
+              likeCount: 5,
+            },
+            {
+              id: asCommentId("1021"),
+              author: { nickname: "익명2", isAnonymous: true },
+              content: "결론 마지막 줄 ㄹㅇ… 급하면 판단 흐려짐",
+              createdAt: "2025-12-12",
+              likeCount: 3,
+            },
+          ],
         },
 
         // ===============================
-        // 1) anonymous - 계좌 공개 + 강남역 보자 글
+        // 1) anonymous - 계좌 공개 + 강남역 보자 글 (자극/관심글, 좋아요 높음)
         // ===============================
         {
           id: asPostId("202"),
@@ -411,27 +426,337 @@ export const everytimeData: EverytimeData = {
 농협 123-1212-123456
 이거 당근마켓 사기꾼 계좌라던데,
 
-지금 강남역에서 보잔다 ㅋㅋㅋㅋㅋ
+지금 강남역에서 보잔다 ㅋㅋㅋㅋㅋ 저녁 7시에 강남역에서 보자는거부터 수상함
 얼굴 좀 보자 ㅋㅋ
+최근에 구속되었다는데 풀린건가? 구속 수사 절차 어떻게 되는거임?
 
-(진짜 나오는지 아는 사람? 후기 부탁)
 `,
           createdAt: "2025-12-12",
-          likeCount: 1,
+          likeCount: 147,
           comments: [
             {
               id: asCommentId("1014"),
               author: { nickname: "익명2", isAnonymous: true },
               content: "와 이거 실화냐… 혹시 경찰 부르면 되는 거 아님?",
               createdAt: "2025-12-12",
-              likeCount: 9,
+              likeCount: 32,
             },
             {
               id: asCommentId("1015"),
               author: { nickname: "익명3", isAnonymous: true },
               content: "좌표 찍고 사람 몰리면 바로 튈 듯… 조심해요.",
               createdAt: "2025-12-12",
+              likeCount: 41,
+            },
+            {
+              id: asCommentId("1022"),
+              author: { nickname: "익명4", isAnonymous: true },
+              content:
+                "구속영장 기각되면 나올 수는 있음. 근데 나오자마자 또 사기치는 건 ㅋㅋㅋㅋㅋㅋ ",
+              createdAt: "2025-12-12",
+              likeCount: 18,
+            },
+            {
+              id: asCommentId("1023"),
+              author: { nickname: "익명5", isAnonymous: true },
+              content: "이런 건 캡쳐해서 경찰에 넘겨야지;;",
+              createdAt: "2025-12-12",
+              likeCount: 20,
+            },
+          ],
+        },
+
+        // ===============================
+        // 2) 엄마 번호 몰라서 전화 못함 (가벼운 웃김, 좋아요 중간)
+        // ===============================
+        {
+          id: asPostId("203"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title:
+            "아니 엄마한테 할 말있어서 전화 하고 싶은데 나 핸드폰 잃어버리고 폰 바꿔서서 엄마 전화번호를 몰라서 전화를 못하고 있음ㅋㅋㅋ",
+          preview: "폰 바꿨더니 엄마 번호 기억 안 남…ㅋㅋ",
+          body: `
+아니 엄마한테 할 말있어서 전화 하고 싶은데
+나 핸드폰 잃어버리고 폰 바꿔서서
+엄마 전화번호를 몰라서 전화를 못하고 있음ㅋㅋㅋ
+`,
+          createdAt: "2025-12-15",
+          likeCount: 63,
+          comments: [
+            {
+              id: asCommentId("1024"),
+              author: { nickname: "익1", isAnonymous: true },
+              content: "아니 엄마 전화번호는 쫌 외워라",
+              createdAt: "2025-12-15",
               likeCount: 14,
+            },
+            {
+              id: asCommentId("1025"),
+              author: { nickname: "글쓴이", isAnonymous: true },
+              content: "평소에 전화할 일이 없는걸 어떡해 ㅋㅋㅋㅋ",
+              createdAt: "2025-12-15",
+              likeCount: 9,
+            },
+            {
+              id: asCommentId("1026"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "아 근데 그럴만도 함…요즘에 누가 전화번호 외우고 다녀",
+              createdAt: "2025-12-15",
+              likeCount: 22,
+            },
+            {
+              id: asCommentId("1027"),
+              author: { nickname: "익3", isAnonymous: true },
+              content: "이 정도면 가족에 관심 없는게 너무 심한거 아님?",
+              createdAt: "2025-12-15",
+              likeCount: 7,
+            },
+          ],
+        },
+
+        // ===============================
+        // 3) 동생이 모르는 번호라 안 받음 (욕/자극 조금, 좋아요 높음)
+        // ===============================
+        {
+          id: asPostId("204"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title:
+            "동생새끼한테 계속 전화했는데 안 받아서 나중에 물어봤는데 모르는 전화번호라서 안 받은거래 ㅋㅋㅋㅋ ㅁㅊㄴ 인가",
+          preview: "번호 바뀐 걸 몰라서 동생이 씹었다 ㅋㅋㅋㅋ",
+          body: `
+동생새끼한테 계속 전화했는데 안 받아서
+나중에 물어봤는데 모르는 전화번호라서 안 받은거래 ㅋㅋㅋㅋ
+ㅁㅊㄴ 인가
+`,
+          createdAt: "2025-12-15",
+          likeCount: 118,
+          comments: [
+            {
+              id: asCommentId("1028"),
+              author: { nickname: "익1", isAnonymous: true },
+              content: "쓴이는 전화번호 저장해놓긴 함?",
+              createdAt: "2025-12-15",
+              likeCount: 16,
+            },
+            {
+              id: asCommentId("1029"),
+              author: { nickname: "글쓴이", isAnonymous: true },
+              content: "난 이름 석자로 저장해둠 ㅋㅋㅋㅋ",
+              createdAt: "2025-12-15",
+              likeCount: 12,
+            },
+            {
+              id: asCommentId("1030"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "친남매 인정이네 ㅋ",
+              createdAt: "2025-12-15",
+              likeCount: 25,
+            },
+            {
+              id: asCommentId("1031"),
+              author: { nickname: "익3", isAnonymous: true },
+              content: "나도 누나 전화번호 저장도 안해둠",
+              createdAt: "2025-12-15",
+              likeCount: 8,
+            },
+            {
+              id: asCommentId("1032"),
+              author: { nickname: "익4", isAnonymous: true },
+              content:
+                "내 동생은 평소에 연락도 안하다가 용돈 모자라면 갑자기 카톡으로 애교부림",
+              createdAt: "2025-12-15",
+              likeCount: 19,
+            },
+          ],
+        },
+
+        // ===============================
+        // 4) 엄마 임영웅 편돌이 썰 (밈/공감, 좋아요 중상)
+        // ===============================
+        {
+          id: asPostId("205"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title: "어제 개웃긴 썰 ㅋㅋㅋ",
+          preview:
+            "엄마가 임영웅 편의점 알바 얘기에 맘아파함… 근데 난 2년차 편돌이",
+          body: `
+울 엄마가 임영웅 팬인데  임영웅얘기 하다가 갑자기
+임영웅이 무명시절에 편의점 알바했다는 얘기 듣고 엄청 맘아파 하더라…..
+
+근데 난 2년차 편돌이임 ㅋㅋ
+`,
+          createdAt: "2025-12-14",
+          likeCount: 92,
+          comments: [
+            {
+              id: asCommentId("1033"),
+              author: { nickname: "익1", isAnonymous: true },
+              content:
+                "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+              createdAt: "2025-12-14",
+              likeCount: 11,
+            },
+            {
+              id: asCommentId("1034"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "임영웅은 인정이지",
+              createdAt: "2025-12-14",
+              likeCount: 14,
+            },
+          ],
+        },
+
+        // ===============================
+        // 5) 아빠 감동문자 vs 대학원생 (반전/웃김, 좋아요 높음)
+        // ===============================
+        {
+          id: asPostId("206"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title: "아빠한테 개 감동적인 문자 받음",
+          preview: "수능 화이팅 장문 받고 울었는데… 아빠 나 대학원생임",
+          body: `
+아빠가  갑자기 오늘 아침 장문으로 나한테
+수능 화이팅해라 수능이 인생의 전부 아니다 막 이런거 보냈고 펑펑 움….
+
+근데 아빠 나 대학원생임,
+수능본지 5년도 더 되간다고요
+`,
+          createdAt: "2025-12-14",
+          likeCount: 134,
+          comments: [
+            {
+              id: asCommentId("1035"),
+              author: { nickname: "익명1", isAnonymous: true },
+              content:
+                "이정도면 아빠가 메디컬 노려서 다시 수특 피라고 압박 주는거 아님??? ㅋㅋㅋㅋ",
+              createdAt: "2025-12-14",
+              likeCount: 33,
+            },
+            {
+              id: asCommentId("1036"),
+              author: { nickname: "익명2", isAnonymous: true },
+              content: "늦어도 한참 많이 늦어셨네…ㅋㅋ",
+              createdAt: "2025-12-14",
+              likeCount: 21,
+            },
+            {
+              id: asCommentId("1037"),
+              author: { nickname: "익명3", isAnonymous: true },
+              content: "아빠 폰에 아직도 수능 D-100 배경화면 해둔 듯 ㅠㅋㅋ",
+              createdAt: "2025-12-14",
+              likeCount: 17,
+            },
+          ],
+        },
+
+        // ===============================
+        // 6) (추가) Yoon 피아노 학원 지하실 이상한 소리 (미스터리/자극, 좋아요 매우 높음)
+        // ===============================
+        {
+          id: asPostId("207"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title:
+            "지금 Yoon 피아노 학원인데 지하실에서 이상한 소리 들림… 레슨실도 비어있고 뭐지?",
+          preview:
+            "원래 이 시간엔 레슨 있어서 피아노 소리 들리는데 오늘은 비어있고 지하에서 이상한 소리남…",
+          body: `
+지금 Yoon 피아노 학원인데
+지하실에서 이상한 소리 들린다. 레슨실도 비어있고. 뭐지?
+
+원래 이 시간에는 레슨 있어서 매번 피아노 소리가 들렸는데.
+
+그냥 무시할까? 그게 좋겠지? 괜히 나까지.
+`,
+          createdAt: "2025-12-18",
+          likeCount: 6,
+          comments: [
+            {
+              id: asCommentId("1038"),
+              author: { nickname: "익1", isAnonymous: true },
+              content: "너 혼자임? 문 잠가… 그리고 나가 ㅈㅂ",
+              createdAt: "2025-12-18",
+              likeCount: 64,
+            },
+            {
+              id: asCommentId("1039"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "무시가 맞는지 모르겠는데… 일단 사람 있는 곳으로 ㄱㄱ",
+              createdAt: "2025-12-18",
+              likeCount: 51,
+            },
+            {
+              id: asCommentId("1040"),
+              author: { nickname: "익3", isAnonymous: true },
+              content: "관리자/원장한테 바로 연락하셈. 괜히 내려가지 말고",
+              createdAt: "2025-12-18",
+              likeCount: 48,
+            },
+            {
+              id: asCommentId("1041"),
+              author: { nickname: "익4", isAnonymous: true },
+              content: "이거 ㄹㅇ 공포썰 각인데 후기 좀",
+              createdAt: "2025-12-18",
+              likeCount: 37,
+            },
+          ],
+        },
+
+        // ===============================
+        // 7) (추가) Yoon 피아노 학원 명의도용 소문 (폭로/논란, 좋아요 매우 높음)
+        // ===============================
+        {
+          id: asPostId("208"),
+          boardId: asBoardId("2"),
+          author: { nickname: "익명", isAnonymous: true },
+          title:
+            "요즘 Yoon 피아노 학원 소문 아는 사람? 샤입 3출 쪽인데 레슨쌤 명의도용했다는 얘기 돎",
+          preview:
+            "친구가 거기 다니는데 강력 의심 중이라 오늘 가서 떠본다 함… 말려야 하나?",
+          body: `
+요즘 Yoon 피아노 학원 알아? 샤입 3출에 있는거.
+
+그거 레슨쌤 중 한명이 명의도용한걸로 지금 소문돌고 있음.
+내 친구가 거기 다니는데 지금 강력하게 의심하고 있어서 오늘 가서 떠본다고 함.
+
+말려야하나?
+`,
+          createdAt: "2025-12-18",
+          likeCount: 1,
+          comments: [
+            {
+              id: asCommentId("1042"),
+              author: { nickname: "익1", isAnonymous: true },
+              content:
+                "이런 건 떠보지 말고 증거/기록 남기고 신고 루트로 가야함",
+              createdAt: "2025-12-18",
+              likeCount: 72,
+            },
+            {
+              id: asCommentId("1043"),
+              author: { nickname: "익2", isAnonymous: true },
+              content: "샤입 3출 그 학원 맞음? 나도 그쪽 얘기 들은 적 있음",
+              createdAt: "2025-12-18",
+              likeCount: 55,
+            },
+            {
+              id: asCommentId("1044"),
+              author: { nickname: "익3", isAnonymous: true },
+              content: "친구 혼자 보내지 마… 괜히 찍히면 위험할 수도",
+              createdAt: "2025-12-18",
+              likeCount: 49,
+            },
+            {
+              id: asCommentId("1045"),
+              author: { nickname: "익4", isAnonymous: true },
+              content:
+                "근데 명의도용이면 피해자가 따로 있을 텐데… 소문만으론 ㄴㄴ",
+              createdAt: "2025-12-18",
+              likeCount: 28,
             },
           ],
         },

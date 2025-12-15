@@ -4,7 +4,7 @@ export const myAccount: Account = {
   id: "jiyoon_pianjy",
   username: "지윤",
   image: "/instagram/profile/placeholder.png",
-  bio: "SNU COMM 25",
+  bio: "SNU PIANO 25",
   followers: 150,
   following: 200,
   postCount: 1,

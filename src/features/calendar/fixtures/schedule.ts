@@ -31,8 +31,8 @@ export const scheduleFixture: CalendarEvent[] = [
   {
     id: "lesson",
     title: "피아노 학원",
-    start: "2025-12-18T19:00+09:00",
-    end: "2025-12-18T20:00+09:00",
+    start: "2025-12-18T18:00+09:00",
+    end: "2025-12-18T19:00+09:00",
     variant: "filled",
     recurrence: "weekly",
   },
@@ -45,9 +45,9 @@ export const scheduleFixture: CalendarEvent[] = [
   },
   {
     id: "notice",
-    title: "샤울대 입시 결과 발표",
-    start: "2024-12-15T13:00:00+09:00",
-    end: "2024-12-15T14:00:00+09:00",
+    title: "밴드 결성일",
+    start: "2025-07-13T13:00:00+09:00",
+    end: "2025-07-13T14:00:00+09:00",
     variant: "outlined",
   },
   {

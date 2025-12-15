@@ -76,12 +76,10 @@ export function TimeGridDay({
       date.getMonth() === 11 && // December (0-indexed)
       date.getDate() === 18;
 
-    // 원래: 오늘(date==now)일 때만 표시
-    // 데모: 12/18은 "오늘이 아니어도" 표시하고 21:00에 고정
     if (!isSameDateAsNow && !isDec18) return null;
 
-    const h = isDec18 ? 21 : now.getHours();
-    const m = isDec18 ? 0 : now.getMinutes();
+    const h = isDec18 ? 19 : now.getHours();
+    const m = isDec18 ? 10 : now.getMinutes();
 
     const minutesFromStart = (h - startHour) * 60 + m;
     const maxMinutes = (endHour - startHour + 1) * 60;

@@ -176,7 +176,7 @@ export function WeekView({
     return { allDayItems: allDay, positionedTimed: timed };
   }, [events, days, startHour, endHour, minutesPerPx]);
 
-  const now = useMemo(() => new Date(2025, 11, 18, 21, 0, 0), []);
+  const now = useMemo(() => new Date(2025, 11, 18, 19, 10, 0), []);
   const nowLine = useMemo(() => {
     const todayIdx = days.findIndex((d) => sameDay(d, now));
     if (todayIdx < 0) return null;
