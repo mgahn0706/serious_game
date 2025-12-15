@@ -43,4 +43,11 @@ export const scheduleFixture: CalendarEvent[] = [
     end: "2025-12-15T14:00:00+09:00",
     variant: "outlined",
   },
+  {
+    id: "meeting",
+    title: "프로젝트 미팅",
+    start: "2025-12-18T22:00:00+09:00",
+    end: "2025-12-20T22:40:00+09:00",
+    variant: "filled",
+  },
 ];

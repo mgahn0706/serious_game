@@ -27,6 +27,7 @@ export type EverytimeComment = {
 export type EverytimePost = {
   id: PostId;
   boardId: BoardId;
+  author: { nickname: string; isAnonymous: boolean };
 
   title: string;
   preview: string; // 리스트용 요약

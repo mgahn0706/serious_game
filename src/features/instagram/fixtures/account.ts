@@ -119,7 +119,7 @@ const additionalAccounts: Account[] = [
   },
   {
     id: "sim_hyejin",
-    username: "심현진",
+    username: "심혜진",
     image: "/instagram/profile/placeholder.png",
     bio: "피아노로 유학 가는게 꿈입니다. @yoon_music_s2",
     followers: 300,

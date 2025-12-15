@@ -19,6 +19,10 @@ export default function EverytimePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { boardId } = useParams(); // ✅ /everytime/board/:boardId
 
+  // ✅ pagination
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 5;
+
   // ✅ 현재 선택된 board 결정 (없으면 0번 fallback)
   const board: EverytimeBoard = useMemo(() => {
     if (!boardId) return everytimeData.boards[0];
@@ -29,7 +33,6 @@ export default function EverytimePage() {
   }, [boardId]);
 
   const posts = board.posts;
-
   const normalized = searchTerm.trim().toLowerCase();
 
   const filteredPosts = useMemo(() => {
@@ -39,6 +42,19 @@ export default function EverytimePage() {
       return text.includes(normalized);
     });
   }, [normalized, posts]);
+
+  // ✅ 검색어/보드 바뀌면 1페이지로
+  useMemo(() => {
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [normalized, String(board.id)]);
+
+  // ✅ paginate
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE));
+  const pagePosts = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredPosts.slice(start, start + PAGE_SIZE);
+  }, [filteredPosts, page]);
 
   // ✅ 카테고리별 보드 묶기 (데이터에 categoryTitle이 이미 있음)
   const boardsByCategory = useMemo(() => {
@@ -52,7 +68,6 @@ export default function EverytimePage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#333]">
-      {/* ✅ Top Navigation (공통 컴포넌트) */}
       <EverytimeTopBar />
 
       {/* ✅ Category Dropdown: “진짜 보드”로 렌더링 */}
@@ -75,17 +90,15 @@ export default function EverytimePage() {
         <div className="col-span-3">
           <h2 className="text-xl font-semibold mb-4">{board.title}</h2>
 
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
-              <Post key={String(post.id)} {...post} />
-            ))
+          {pagePosts.length > 0 ? (
+            pagePosts.map((post) => <Post key={String(post.id)} {...post} />)
           ) : (
-            <div className="bg-white border border-gray-300 rounded p-6 mb-3 text-sm text-gray-500">
+            <div className="bg-white border border-gray-300 rounded p-6 mb-2 text-sm text-gray-500">
               검색 결과가 없습니다.
             </div>
           )}
 
-          {/* Search Bar + Next Button */}
+          {/* Search Bar + Pagination */}
           <div className="mt-6 flex items-center justify-between">
             <div className="flex items-center border border-gray-300 rounded-md px-4 py-2 w-full max-w-xl bg-white">
               <button className="flex items-center gap-1 text-sm text-gray-700 mr-4">
@@ -106,9 +119,27 @@ export default function EverytimePage() {
               <SearchIcon className="w-5 h-5 text-gray-500 ml-3" />
             </div>
 
-            <button className="ml-6 px-5 py-2 border border-red-500 text-red-500 text-sm font-semibold rounded-md hover:bg-red-50">
-              다음 &gt;
-            </button>
+            <div className="ml-6 flex items-center gap-2">
+              <button
+                className="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-semibold rounded-md bg-white hover:bg-gray-50 disabled:opacity-50"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1}
+              >
+                이전
+              </button>
+
+              <div className="text-xs text-gray-500 min-w-[72px] text-center">
+                {page} / {totalPages}
+              </div>
+
+              <button
+                className="px-4 py-2 border border-red-500 text-red-500 text-sm font-semibold rounded-md hover:bg-red-50 disabled:opacity-50"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages}
+              >
+                다음 &gt;
+              </button>
+            </div>
           </div>
         </div>
 
@@ -135,13 +166,14 @@ function CategoryColumn({
   return (
     <div>
       <div className="font-semibold mb-2">{title}</div>
-      <ul className="space-y-1 text-gray-700 text-sm">
+      {/* ✅ reduce margin */}
+      <ul className="space-y-0.5 text-gray-700 text-sm">
         {boards.map((b) => {
           const isActive = String(b.id) === currentBoardId;
           return (
             <li
               key={String(b.id)}
-              className={`cursor-pointer ${
+              className={`cursor-pointer py-0.5 ${
                 isActive ? "text-red-600 font-semibold" : "hover:text-red-600"
               }`}
               onClick={() => navigate(`/everytime/board/${String(b.id)}`)}
@@ -162,7 +194,7 @@ function Post({ id, title, createdAt, preview, comments }: EverytimePost) {
 
   return (
     <div
-      className="bg-white border border-gray-300 rounded p-4 mb-3 text-sm cursor-pointer hover:bg-gray-50"
+      className="bg-white border border-gray-300 rounded p-3 mb-2 text-sm cursor-pointer hover:bg-gray-50"
       onClick={() => navigate(`/everytime/${String(id)}`)}
     >
       <div className="font-semibold mb-1">{title}</div>
