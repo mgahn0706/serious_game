@@ -201,10 +201,6 @@ export default function PostCard({ post }: PostCardProps) {
           ))}
         </div>
       )}
-
-      <div className="px-4 py-2 text-sm text-muted-foreground cursor-pointer hover:text-foreground mb-4">
-        댓글 모두 보기
-      </div>
     </div>
   );
 }

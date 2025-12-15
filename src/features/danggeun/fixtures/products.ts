@@ -24,26 +24,6 @@ export const products: Product[] = [
     },
   },
   {
-    id: 2,
-    title: "플레이스테이션 (PS) 최신형",
-    price: 550000,
-    location: "압구정동",
-    time: "3시간 전",
-    imageUrl:
-      "https://images.unsplash.com/photo-1606813909359-df8c5d6f0d08?auto=format&fit=crop&w=600&q=80",
-    sellerId: 1,
-    category: "디지털기기",
-    description: `실사용 적고 기스 없습니다.
-듀얼센스 컨트롤러 1개 포함.
-
-직거래만 합니다.`,
-    stats: {
-      chat: 1,
-      interest: 7,
-      view: 410,
-    },
-  },
-  {
     id: 3,
     title: "유심 칩 (미개봉)",
     price: 5000,

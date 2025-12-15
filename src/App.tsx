@@ -1,12 +1,12 @@
 // src/App.tsx
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import DanggeunPage from "./pages/Danggeun/DanggeunPage";
 import EverytimePage from "./pages/Everytime/EverytimePage";
 import EverytimePostDetailPage from "./pages/Everytime/EverytimePostDetailPage";
 import InstagramPage from "./pages/Instagram/InstagramPage";
 import ExplorePage from "./pages/Instagram/ExplorePage";
-import DefaultPage from "./pages/DefaultPage";
 import ProfilePage from "./pages/Instagram/ProfilePage";
 import CalendarPage from "./pages/CalendarPage";
 import DanggeunDetailPage from "./pages/Danggeun/DanggeunDetailPage";
@@ -20,11 +20,6 @@ import EverytimeLoginPage from "./pages/Everytime/EverytimeLoginPage";
 // ✅ Auth
 import { isLoggedIn } from "./features/auth/scopedSessionAuth";
 import RequireAuth from "./features/auth/RequireScopedAuth";
-import { useEffect } from "react";
-
-function RootRedirect() {
-  return <Navigate to="/default" replace />;
-}
 
 /** ✅ route 기반 title sync */
 function TitleSync() {
@@ -54,8 +49,7 @@ export default function App() {
 
       <Routes>
         {/* ===================== ROOT ===================== */}
-        <Route path="/" element={<RootRedirect />} />
-        <Route path="/default" element={<DefaultPage />} />
+        <Route path="/" element={<Navigate to="/instagram/login" replace />} />
 
         {/* ===================== LOGIN (PUBLIC) ===================== */}
         <Route
@@ -171,7 +165,7 @@ export default function App() {
         <Route path="/calendar" element={<CalendarPage />} />
 
         {/* ===================== FALLBACK ===================== */}
-        <Route path="*" element={<DefaultPage />} />
+        <Route path="*" element={<Navigate to="/instagram/login" replace />} />
       </Routes>
     </>
   );

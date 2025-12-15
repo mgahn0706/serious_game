@@ -9,6 +9,7 @@ import {
   asPostId,
   type EverytimePost,
   type EverytimeComment,
+  type EverytimeBoard,
 } from "@/features/everytime/types/types";
 
 import { EverytimeTopBar } from "@/features/everytime/components/EverytimeTopBar";
@@ -20,7 +21,6 @@ export default function EverytimePostDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // ✅ 내가 쓴 글/댓글 판별용
   const MY_AUTHOR_ID = "moonlight_vocal";
 
   // ✅ 모든 게시판에서 post 찾기 + 해당 게시판도 같이 찾기
@@ -37,6 +37,16 @@ export default function EverytimePostDetailPage() {
 
     return { post: undefined as EverytimePost | undefined, board: null };
   }, [id]);
+
+  // ✅ (추가) 카테고리별 보드 묶기 — EverytimePage와 동일
+  const boardsByCategory = useMemo(() => {
+    const map = new Map<string, EverytimeBoard[]>();
+    for (const b of everytimeData.boards) {
+      const key = b.categoryTitle || "기타";
+      map.set(key, [...(map.get(key) ?? []), b]);
+    }
+    return map;
+  }, []);
 
   if (!post || !board) {
     return (
@@ -62,11 +72,8 @@ export default function EverytimePostDetailPage() {
   }
 
   const commentList: EverytimeComment[] = post.comments ?? [];
-
-  // ✅ 글 작성자면 삭제 노출
   const isMyPost = post.author?.nickname === MY_AUTHOR_ID;
 
-  // parent 없는 댓글 먼저, 대댓글은 아래로
   const sortedComments = useMemo(() => {
     const roots = commentList.filter((c) => !c.parentCommentId);
     const replies = commentList.filter((c) => !!c.parentCommentId);
@@ -86,7 +93,6 @@ export default function EverytimePostDetailPage() {
       out.push(...kids);
     }
 
-    // parentCommentId가 있지만 부모를 못 찾는 애들은 맨 아래
     const orphanReplies = replies.filter(
       (r) =>
         !commentList.some((c) => String(c.id) === String(r.parentCommentId))
@@ -103,6 +109,20 @@ export default function EverytimePostDetailPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#333]">
       <EverytimeTopBar />
+
+      {/* ✅ (추가) PostDetail에서도 보드 목록 바로 보이게 */}
+      <div className="w-full bg-white border-b border-gray-200 py-4">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-4 gap-6 text-sm leading-6">
+          {[...boardsByCategory.entries()].map(([categoryTitle, boards]) => (
+            <CategoryColumn
+              key={categoryTitle}
+              title={categoryTitle}
+              boards={boards}
+              currentBoardId={String(board.id)} // ✅ 현재 글이 속한 보드 강조
+            />
+          ))}
+        </div>
+      </div>
 
       <main className="max-w-6xl mx-auto grid grid-cols-4 gap-8 mt-4 px-6 pb-8">
         {/* LEFT */}
@@ -122,9 +142,7 @@ export default function EverytimePostDetailPage() {
 
             {/* Post */}
             <div className="px-6 pt-6 pb-5 border-b border-gray-200">
-              {/* ✅ Author row (삭제 버튼은 여기, 우측 정렬) */}
               <div className="flex items-start justify-between mb-5">
-                {/* LEFT */}
                 <div className="flex items-start gap-3">
                   <div
                     className="w-10 h-10 rounded-md bg-center bg-cover bg-no-repeat"
@@ -142,7 +160,6 @@ export default function EverytimePostDetailPage() {
                   </div>
                 </div>
 
-                {/* RIGHT */}
                 {isMyPost && (
                   <button className="text-xs text-gray-400 hover:underline">
                     삭제
@@ -150,7 +167,6 @@ export default function EverytimePostDetailPage() {
                 )}
               </div>
 
-              {/* Title & body */}
               <h1 className="text-lg font-semibold mb-4 leading-snug text-gray-900">
                 {post.title}
               </h1>
@@ -159,7 +175,6 @@ export default function EverytimePostDetailPage() {
                 {post.body ?? post.preview ?? "본문 내용이 없습니다."}
               </p>
 
-              {/* Reactions */}
               <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
                 <div className="flex items-center gap-1 text-red-500">
                   <ThumbsUp className="w-3.5 h-3.5" />
@@ -172,7 +187,6 @@ export default function EverytimePostDetailPage() {
                 </div>
               </div>
 
-              {/* Action buttons */}
               <div className="flex gap-2">
                 <button className="px-4 py-2 rounded border border-gray-200 bg-white text-xs text-gray-600 hover:bg-gray-50">
                   공감
@@ -204,7 +218,6 @@ export default function EverytimePostDetailPage() {
               )}
             </div>
 
-            {/* Bottom bar */}
             <div className="px-6 py-4 flex items-center justify-between">
               <button
                 className="px-4 py-2 border border-red-500 text-red-500 text-sm font-semibold rounded bg-white hover:bg-red-50"
@@ -221,6 +234,42 @@ export default function EverytimePostDetailPage() {
           <EverytimeSidebar />
         </div>
       </main>
+    </div>
+  );
+}
+
+/* ---------- Category Column (EverytimePage에서 그대로 복붙) ---------- */
+
+function CategoryColumn({
+  title,
+  boards,
+  currentBoardId,
+}: {
+  title: string;
+  boards: EverytimeBoard[];
+  currentBoardId: string;
+}) {
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <div className="font-semibold mb-2">{title}</div>
+      <ul className="space-y-0.5 text-gray-700 text-sm">
+        {boards.map((b) => {
+          const isActive = String(b.id) === currentBoardId;
+          return (
+            <li
+              key={String(b.id)}
+              className={`cursor-pointer py-0.5 ${
+                isActive ? "text-red-600 font-semibold" : "hover:text-red-600"
+              }`}
+              onClick={() => navigate(`/everytime/board/${String(b.id)}`)}
+            >
+              {b.title}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -306,8 +355,6 @@ function CommentItem({
   );
 }
 
-/* ---------- Right-side comment actions ---------- */
-
 function CommentActions({
   likeCount,
   isMine,
@@ -321,7 +368,6 @@ function CommentActions({
       <button className="hover:underline">
         공감{likeCount > 0 ? `(${likeCount})` : ""}
       </button>
-
       {isMine && <button className="hover:underline">삭제</button>}
     </div>
   );

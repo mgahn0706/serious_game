@@ -40,7 +40,14 @@ export const scheduleFixture: CalendarEvent[] = [
     id: "notice",
     title: "샤울대 입시 결과 발표",
     start: "2024-12-15T13:00:00+09:00",
-    end: "2025-12-15T14:00:00+09:00",
+    end: "2024-12-15T14:00:00+09:00",
+    variant: "outlined",
+  },
+  {
+    id: "notice",
+    title: "샤울대 입시 결과 발표",
+    start: "2024-12-15T13:00:00+09:00",
+    end: "2024-12-15T14:00:00+09:00",
     variant: "outlined",
   },
   {

@@ -1,46 +1,81 @@
-// src/App.tsx
+// src/App.tsx (현재 파일명이 실제론 DanggeunPage.tsx 같은데, 네가 준 그대로 유지)
+"use client";
+
 import React, { useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
+
 import { products } from "@/features/danggeun/fixtures/products";
+import { accounts } from "@/features/danggeun/fixtures/accounts";
 import type { Product } from "@/features/danggeun/types/types";
 import DanggeunHeader from "@/features/danggeun/components/DanggeunHeader";
 
 type SortKey = "latest" | "priceAsc" | "priceDesc";
 
+/** ✅ 5개 카테고리로 축약 */
 const CATEGORY_TABS = [
-  "인기 검색어",
-  "여성의류",
-  "자전거",
-  "아이들",
-  "컴퓨터",
-  "냉장고",
-  "굿즈",
-  "골프",
-  "닌텐도",
-  "다이슨",
-  "캠핑",
-  "포토카드",
-  "에어팟",
-  "버즈",
-  "스타벅스",
+  "전체",
+  "패션",
+  "전자기기",
+  "생활·가전",
+  "취미·기타",
 ] as const;
+
+type CategoryTab = (typeof CATEGORY_TABS)[number];
+
+/** ✅ 기존 상세 카테고리 -> 상위 5개 카테고리 매핑 */
+const CATEGORY_MAP: Record<string, CategoryTab> = {
+  // 패션
+  여성의류: "패션",
+  굿즈: "패션",
+  포토카드: "패션",
+
+  // 전자기기
+  컴퓨터: "전자기기",
+  닌텐도: "전자기기",
+  에어팟: "전자기기",
+  버즈: "전자기기",
+  다이슨: "전자기기",
+
+  // 생활·가전
+  냉장고: "생활·가전",
+  아이들: "생활·가전",
+
+  // 취미·기타
+  자전거: "취미·기타",
+  골프: "취미·기타",
+  캠핑: "취미·기타",
+  스타벅스: "취미·기타",
+};
 
 const DangguenPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>(
+  const [selectedCategory, setSelectedCategory] = useState<CategoryTab>(
     CATEGORY_TABS[0]
   );
   const [sortKey, setSortKey] = useState<SortKey>("latest");
 
+  // ✅ sellerId -> username map
+  const sellerNameById = useMemo(() => {
+    const m = new Map<number, string>();
+    for (const a of accounts) {
+      m.set(a.id, a.username);
+    }
+    return m;
+  }, []);
+
   const normalized = searchTerm.trim().toLowerCase();
 
   const filtered = useMemo(() => {
-    // 1) category filter
+    // 1) category filter (5개 상위 카테고리 기준)
     const byCategory =
-      selectedCategory === "인기 검색어"
+      selectedCategory === "전체"
         ? products
-        : products.filter((p) => p.category === selectedCategory);
+        : products.filter((p) => {
+            const mapped: CategoryTab =
+              CATEGORY_MAP[p.category ?? ""] ?? "취미·기타";
+            return mapped === selectedCategory;
+          });
 
     // 2) search filter (title + description + category)
     const bySearch = !normalized
@@ -56,7 +91,6 @@ const DangguenPage: React.FC = () => {
     const sorted = [...bySearch];
     sorted.sort((a, b) => {
       if (sortKey === "latest") {
-        // fixture에 createdAt이 있으면 그걸 쓰고, 없으면 id desc (목록 최신 느낌)
         const aT =
           typeof (a as any).createdAt === "number"
             ? (a as any).createdAt
@@ -68,7 +102,7 @@ const DangguenPage: React.FC = () => {
         return bT - aT;
       }
       if (sortKey === "priceAsc") return a.price - b.price;
-      return b.price - a.price; // priceDesc
+      return b.price - a.price;
     });
 
     return sorted;
@@ -85,7 +119,8 @@ const DangguenPage: React.FC = () => {
         onChangeSortKey={setSortKey}
         totalCount={filtered.length}
       />
-      <MainContent products={filtered} />
+
+      <MainContent products={filtered} sellerNameById={sellerNameById} />
     </div>
   );
 };
@@ -93,8 +128,8 @@ const DangguenPage: React.FC = () => {
 const Header: React.FC<{
   searchTerm: string;
   onChangeSearchTerm: (v: string) => void;
-  selectedCategory: string;
-  onChangeCategory: (v: string) => void;
+  selectedCategory: CategoryTab;
+  onChangeCategory: (v: CategoryTab) => void;
   sortKey: SortKey;
   onChangeSortKey: (v: SortKey) => void;
   totalCount: number;
@@ -118,6 +153,7 @@ const Header: React.FC<{
   return (
     <header className="sticky top-0 z-20 border-b border-carrotBorder bg-white">
       <DanggeunHeader />
+
       {/* 검색바 */}
       <div className="border-t border-carrotBorder bg-white">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-6 py-3">
@@ -132,7 +168,7 @@ const Header: React.FC<{
           </div>
           <button
             onClick={() => {
-              // 버튼은 UX상 존재만. 이미 입력 즉시 반영이라 no-op.
+              // no-op
             }}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-carrot text-white"
           >
@@ -141,7 +177,7 @@ const Header: React.FC<{
         </div>
       </div>
 
-      {/* 카테고리 탭 */}
+      {/* 카테고리 탭 (5개) */}
       <div className="border-t border-carrotBorder bg-white">
         <div className="mx-auto flex max-w-6xl items-center gap-3 overflow-x-auto px-6 py-2 text-[13px] text-gray-600">
           {CATEGORY_TABS.map((cat) => {
@@ -161,7 +197,7 @@ const Header: React.FC<{
             );
           })}
 
-          {/* 정렬 드롭다운 (헤더에도 붙여서 바로 조작 가능하게) */}
+          {/* 정렬 드롭다운 */}
           <div className="ml-auto relative shrink-0">
             <button
               onClick={() => setIsSortOpen((v) => !v)}
@@ -208,35 +244,37 @@ const Header: React.FC<{
   );
 };
 
-const MainContent: React.FC<{ products: Product[] }> = ({ products }) => {
+const MainContent: React.FC<{
+  products: Product[];
+  sellerNameById: Map<number, string>;
+}> = ({ products, sellerNameById }) => {
   return (
     <main className="mx-auto flex max-w-6xl gap-8 px-6 pb-10 pt-6">
       <section className="flex-1">
-        {/* 위치 경로 */}
         <div className="mb-2 flex items-center gap-1 text-[12px] text-gray-500">
           <span>홈</span>
           <ChevronRight className="h-3 w-3" />
           <span>중고거래</span>
         </div>
 
-        {/* 제목 */}
         <h1 className="mb-1 text-[22px] font-semibold text-carrotText">
           서울특별시 강남구 중고거래
         </h1>
 
-        {/* 정렬 / 총 개수 (실제 필터 결과 반영) */}
         <div className="mb-4 flex items-center justify-between text-[12px] text-gray-500">
           <div>총 {products.length.toLocaleString()}개</div>
         </div>
 
-        {/* 상품 그리드 */}
-        <ProductGrid products={products} />
+        <ProductGrid products={products} sellerNameById={sellerNameById} />
       </section>
     </main>
   );
 };
 
-const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
+const ProductGrid: React.FC<{
+  products: Product[];
+  sellerNameById: Map<number, string>;
+}> = ({ products, sellerNameById }) => {
   if (products.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-gray-200 bg-white p-10 text-center text-[14px] text-gray-500">
@@ -249,14 +287,20 @@ const ProductGrid: React.FC<{ products: Product[] }> = ({ products }) => {
     <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 lg:grid-cols-4">
       {products.slice(0, 12).map((p) => (
         <Link key={p.id} to={`/danggeun/products/${p.id}`} className="block">
-          <ProductCard product={p} />
+          <ProductCard
+            product={p}
+            sellerName={sellerNameById.get(p.sellerId) ?? "알 수 없음"}
+          />
         </Link>
       ))}
     </div>
   );
 };
 
-const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
+const ProductCard: React.FC<{ product: Product; sellerName: string }> = ({
+  product,
+  sellerName,
+}) => {
   return (
     <article className="cursor-pointer">
       <div className="mb-2 overflow-hidden rounded-[14px] border border-[#e5e7eb] bg-white">
@@ -268,11 +312,15 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           />
         </div>
       </div>
+
       <h2 className="line-clamp-2 text-[14px] font-normal text-gray-900">
         {product.title}
       </h2>
 
-      {/* price가 number인 fixture 기준 */}
+      <div className="mt-0.5 text-[12px] text-gray-500">
+        판매자 · {sellerName}
+      </div>
+
       <div className="mt-1 text-[15px] font-semibold text-gray-900">
         {product.price.toLocaleString()}원
       </div>
